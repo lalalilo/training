@@ -6,13 +6,20 @@
   "dependencies": {
     "@swc-node/jest": "^1.1.0",
     "@types/express": "^4.17.11",
+    "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "jest": "^26.6.3",
+    "jsonwebtoken": "^8.5.1",
     "ts-node": "^9.1.1",
     "typescript": "^4.1.4"
   },
   "scripts": {
     "start": "ts-node src/index.ts",
     "test": "jest"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.20",
+    "@types/supertest": "^2.0.10",
+    "supertest": "^6.1.3"
   }
 }
