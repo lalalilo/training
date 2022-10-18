@@ -40,6 +40,28 @@ Write a Pod spec to run 651828462322.dkr.ecr.eu-west-3.amazonaws.com/node-web-ap
 
 `kubectl get pods` returns your pod.
 
+### What I did/learn
+
+The pod is accepted by the kubernetes cluster but its status is PENDING, which means it didn't find any nodes to run on. Here are [detailed explanation](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) on each phase of a pod lifecycle.
+
+I've created a node.yaml file with a basic config. Then I've run `k apply -f node.yaml` which answered with "node/greg-training-node created". However running the command `k get nodes` still return "No resources found".
+
+After some unsuccessful research on "create a node in existing kubernetes cluster", I'm creating a node group in AWS console. First I need to create an IAM role for the node group: `greg-training-29-09-2022-node-group-role` following this [page](https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html#create-worker-node-role) (need to be aws admin to do so). Then I've changed the instance type to use t3.micro (I thought it would be the cheappest one) and reduce the disk size to 5GB. Desired size is 2 nodes, minimum size is 2 nodes (not sure to fully understand the difference though) and maximum size is 4.
+The node group is named: `greg-node-group`. The node group creation is taking way too long time.. I'm waiting since 32min..
+I finally got a `NodeCreationFailure: Instances failed to join the kubernetes cluster`
+I'm changing my cluster endpoint access from `Public` ➡️ `Public and Private` (17 min later it's successful).
+
+We add a NAT gateway, and the IAM policies of staging-node-group (load balancer, eks).
+
+🏆 Finally 🏆
+Finally we've been able to move forward running the following command:
+`eksctl create cluster --name greg-kenzo-training-stockholm --region eu-north-1 --version 1.23`
+
+This create a cluster using CloudFormation (AWS Terraform equivalent) automatically with two nodes.
+The goal of this tutorial is not to be able to fully understand VPC, subnet or security group that's why we decided to drop the analysis on why it doesn't work.
+
+Finally the command `kubectl get pods` returns my running pod.
+
 ### Make your API internally accessible
 
 Write a service to expose your pod to the network inside your cluster.
