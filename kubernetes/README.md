@@ -5,6 +5,8 @@ Understand Kubernetes' main Objects by deploying a simple API on a k8s cluster.
 
 ### Create an EKS cluster
 
+You can do it in a region that we don't use for Lalilo such as Stockholm.
+
 In [AWS' console](https://eu-west-3.console.aws.amazon.com/eks/home), deploy a new EKS cluster. Make sure you can connect to the cluster with your cli by running:
 
 `aws eks update-kubeconfig --name <your-cluster-name>`
