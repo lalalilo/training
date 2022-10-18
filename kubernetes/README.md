@@ -70,6 +70,14 @@ Write a service to expose your pod to the network inside your cluster.
 
 `kubectl exec -it <your-pod-name> -- curl <your-service-name>` returns hello world.
 
+### What I did/learn
+
+[Kubernetes service](https://kubernetes.io/docs/concepts/services-networking/service/)
+Running the validation command I have a connection refuse on port 80.
+However, I can connect directly to the pod using: `k exec -it greg-pod -- bash`
+
+Running `k logs greg-pod` which gives `Running on http://0.0.0.0:8080` so I've changed the `targetPort` of the service from `9376` to `8080`. Also I've removed the `containerPort` of the pod.yaml as it seems unused.
+
 ### Make your API publicly accessible
 
 Write an ingress that makes your service accessible to the world.

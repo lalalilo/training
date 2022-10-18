@@ -2,9 +2,9 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: greg-pod
+  labels:
+    app.kubernetes.io/name: trainingClusterApp
 spec:
   containers:
   - name: training-application
     image: 651828462322.dkr.ecr.eu-west-3.amazonaws.com/node-web-app:latest
-    ports:
-    - containerPort: 80
