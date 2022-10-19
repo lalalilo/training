@@ -180,6 +180,18 @@ Write a config map to inject your env variable into the pod.
 
 `curl <your-ingress-address>/author` return { "author": "<your-name>" }
 
+### What I did/learn
+
+I followed two docs: [1](https://kubernetes.io/docs/concepts/configuration/configmap/) and [2](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/)
+
+However when getting the author route I got a 404.
+I checked successfully that the env variable was present in pod using `k exec -it greg-pod -- bash` and `echo $AUTHOR`
+I suspect a wrong docker image.
+Building the docker file locally confirm this hypothesis.
+I'll upload a new docker image tomorrow.
+
+🥇 Yeah it worked 🥇
+
 ### Make sure your service is resilient
 
 Write a ReplicaSet with at least 2 instances
