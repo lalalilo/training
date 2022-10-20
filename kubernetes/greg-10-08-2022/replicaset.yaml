@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: greg-rs
+spec:
+  # modify replicas according to your case
+  replicas: 2
+  selector:
+    matchLabels:
+      pod-selector: main-pod-selector
+  template:
+    metadata:
+      labels:
+        pod-selector: main-pod-selector
+    spec:
+      containers:
+        - name: training-application
+          image: 651828462322.dkr.ecr.eu-west-3.amazonaws.com/node-web-app:latest
+          env:
+            - name: AUTHOR
+              valueFrom:
+                configMapKeyRef:
+                  name: greg-configmap
+                  key: author

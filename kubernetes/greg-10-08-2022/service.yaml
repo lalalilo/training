@@ -4,7 +4,7 @@ metadata:
   name: greg-service
 spec:
   selector:
-    app.kubernetes.io/name: trainingClusterApp
+    pod-selector: main-pod-selector
   ports:
     - protocol: TCP
       port: 80

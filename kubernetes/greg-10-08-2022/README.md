@@ -199,3 +199,9 @@ Write a ReplicaSet with at least 2 instances
 ### Make sure deployments don't cause downtime
 
 Write a Deployment
+
+Question:
+
+Comment les values sont chargés dans les configmaps?
+Comment tu ajoutes un cluster à argocd?
+Selector keept in the service.yaml ... how ?
