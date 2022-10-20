@@ -27,6 +27,8 @@ Write a Pod spec to run 651828462322.dkr.ecr.eu-west-3.amazonaws.com/node-web-ap
 
 Write a service to expose your pod to the network inside your cluster.
 
+Tips: the code is exposed on port `8080`.
+
 **Validation**
 
 `kubectl exec -it <your-pod-name> -- curl <your-service-name>` returns hello world.
