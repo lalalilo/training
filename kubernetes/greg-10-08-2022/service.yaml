@@ -4,7 +4,7 @@ metadata:
   name: greg-service
 spec:
   selector:
-    pod-selector: main-pod-selector
+    app: greg-training
   ports:
     - protocol: TCP
       port: 80

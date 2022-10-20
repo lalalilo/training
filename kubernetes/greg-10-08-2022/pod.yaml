@@ -8,12 +8,15 @@ spec:
   containers:
     - name: training-application
       image: 651828462322.dkr.ecr.eu-west-3.amazonaws.com/node-web-app:latest
-      env:
-        - name: AUTHOR
-          valueFrom:
-            configMapKeyRef:
-              name: greg-configmap
-              key: author
+      # env:
+      #   - name: AUTHOR
+      #     valueFrom:
+      #       configMapKeyRef:
+      #         name: greg-configmap
+      #         key: author
+      envFrom:
+        - configMapRef:
+            name: greg-configmap
       # Taking random values from kubernetes docs.
       resources:
         requests:
