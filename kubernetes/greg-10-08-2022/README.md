@@ -6,8 +6,6 @@ Understand Kubernetes' main Objects by deploying a simple API on a k8s cluster.
 
 ### Create an EKS cluster
 
-You can do it in a region that we don't use for Lalilo such as Stockholm.
-
 In [AWS' console](https://eu-west-3.console.aws.amazon.com/eks/home), deploy a new EKS cluster. Make sure you can connect to the cluster with your cli by running:
 
 `aws eks update-kubeconfig --name <your-cluster-name>`
@@ -68,8 +66,6 @@ Finally the command `kubectl get pods` returns my running pod.
 
 Write a service to expose your pod to the network inside your cluster.
 
-Tips: the code is exposed on port `8080`.
-
 **Validation**
 
 `kubectl exec -it <your-pod-name> -- curl <your-service-name>` returns hello world.
@@ -90,6 +86,92 @@ Write an ingress that makes your service accessible to the world.
 
 `curl <your-ingress-address>` returns hello world from your pod.
 
+### What I did/learn
+
+Reading the [ingress doc](https://kubernetes.io/docs/concepts/services-networking/ingress/) it seems that I first need to setup an [ingress controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/).
+
+[AWS Load Balancer Controller](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.4/how-it-works/) seems to fit the need.
+
+https://aws.amazon.com/premiumsupport/knowledge-center/eks-alb-ingress-controller-setup/
+
+```
+ISSUER_URL=$(aws eks describe-cluster --name greg-kenzo-training-stockholm-sans-vpc \
+  --query "cluster.identity.oidc.issuer" --region eu-north-1 --output text)
+aws iam create-open-id-connect-provider \
+  --url ${ISSUER_URL} \
+  --thumbprint-list oidc.eks.eu-north-1.amazonaws.com \
+  --client-id-list sts.amazonaws.com \
+  --region eu-north-1
+
+```
+
+Call with Kenzo which explained me why we need an ingress controller. The ingress controller is defined inside the cluster and will be pinged by the ingress to create AWS ressources (the ALB for example) that's why the ingress controller need an OIDC.
+
+I'm following both docs from [AWS](https://aws.amazon.com/premiumsupport/knowledge-center/eks-alb-ingress-controller-setup/) and [NGINX](https://www.nginx.com/blog/deploying-nginx-ingress-controller-on-amazon-eks-how-we-tested/).
+It didn't work so I found [another doc](https://docs.aws.amazon.com/eks/latest/userguide/enable-iam-roles-for-service-accounts.html) using `eksctl`
+I created an OIDC for my cluster:
+`eksctl utils associate-iam-oidc-provider --cluster greg-kenzo-training-stockholm-sans-vpc --approve --region eu-north-1`
+
+I created a policy named AWSLoadBalancerControllerIAMPolicyGregTraining following [this tutorial](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.2/deploy/installation/) as the iam_policy.json from the AWS doc was not working.
+Here is the content of the policy:
+https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.2.1/docs/install/iam_policy.json
+
+Then I created the service account with the previous policy attached.
+
+```
+
+eksctl create iamserviceaccount \
+--cluster=greg-kenzo-training-stockholm-sans-vpc \
+--region=eu-north-1 \
+--namespace=kube-system \
+--name=aws-load-balancer-controller \
+--attach-policy-arn=arn:aws:iam::651828462322:policy/AWSLoadBalancerControllerIAMPolicyGregTraining \
+--override-existing-serviceaccounts \
+--approve
+
+```
+
+Then `kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.0.2/cert-manager.yaml`
+
+Then realise it was not useful as I know prod is using helm chart I'm going for helm chart as well so I ran:
+`kubectl delete -f https://github.com/jetstack/cert-manager/releases/download/v1.0.2/cert-manager.yaml`
+
+Then
+`helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=greg-kenzo-training-stockholm-sans-vpc --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller`
+
+⭐️AWS Load Balancer controller installed!⭐️
+
+I'm checking my public subnet go the tag: `kubernetes.io/role/elb 1`
+I'm checking my private subnet go the tag: `kubernetes.io/role/internal-elb 1`
+All good probably because my cluster has been created using CLI.
+
+Running `k apply -f ingress.yaml`
+Running `k describe ingress greg-ingress` gives me:
+
+```bash
+
+➜ k describe ingress greg-ingress
+Name:             greg-ingress
+Labels:           <none>
+Namespace:        default
+Address:          k8s-default-gregingr-ce2d40507d-1389164601.eu-north-1.elb.amazonaws.com
+Ingress Class:    alb
+Default backend:  greg-service:80 (192.168.60.232:8080)
+Rules:
+  Host        Path  Backends
+  ----        ----  --------
+  *           *     greg-service:80 (192.168.60.232:8080)
+Annotations:  alb.ingress.kubernetes.io/scheme: internet-facing
+              alb.ingress.kubernetes.io/target-type: ip
+Events:
+  Type    Reason                  Age   From     Message
+  ----    ------                  ----  ----     -------
+  Normal  SuccessfullyReconciled  3s    ingress  Successfully reconciled
+
+```
+
+Wouhouuu validation is working, running `curl k8s-default-gregingr-ce2d40507d-1389164601.eu-north-1.elb.amazonaws.com` return "Hello World"
+
 ### Use environment variables
 
 Write a config map to inject your env variable into the pod.
@@ -98,6 +180,18 @@ Write a config map to inject your env variable into the pod.
 
 `curl <your-ingress-address>/author` return { "author": "<your-name>" }
 
+### What I did/learn
+
+I followed two docs: [1](https://kubernetes.io/docs/concepts/configuration/configmap/) and [2](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/)
+
+However when getting the author route I got a 404.
+I checked successfully that the env variable was present in pod using `k exec -it greg-pod -- bash` and `echo $AUTHOR`
+I suspect a wrong docker image.
+Building the docker file locally confirm this hypothesis.
+I'll upload a new docker image tomorrow.
+
+🥇 Yeah it worked 🥇
+
 ### Make sure your service is resilient
 
 Write a ReplicaSet with at least 2 instances
@@ -105,3 +199,9 @@ Write a ReplicaSet with at least 2 instances
 ### Make sure deployments don't cause downtime
 
 Write a Deployment
+
+Question:
+
+Comment les values sont chargés dans les configmaps?
+Comment tu ajoutes un cluster à argocd?
+Selector keept in the service.yaml ... how ?
