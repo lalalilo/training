@@ -1,21 +1,27 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import { HelloWorld } from "./components/HelloWorld";
+import { StyleSheet } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+
+import { IssueCreator } from "./components/IssueCreator";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <HelloWorld />
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
+        <IssueCreator />
+        <StatusBar style="light" />
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#25292e",
     alignItems: "center",
     justifyContent: "center",
+    color: "white",
+    gap: 20,
   },
 });
