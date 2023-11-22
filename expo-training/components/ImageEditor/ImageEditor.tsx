@@ -1,6 +1,8 @@
+import { useCallback, useRef } from "react";
 import { StyleSheet, View, ImageSourcePropType } from "react-native";
 import { GestureDetector, Gesture } from "react-native-gesture-handler";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
+import ViewShot, { captureRef } from "react-native-view-shot";
 
 import { usePanGesture } from "./usePanGesture";
 import { usePinchGesture } from "./usePinchGesture";
@@ -11,13 +13,16 @@ type ImageEditorProps = {
   source: ImageSourcePropType;
   imageStyle: object;
   removeImage: () => void;
+  setFinalImageUri: (uri: string) => void;
 };
 
 export const ImageEditor = ({
   source,
   imageStyle,
   removeImage,
+  setFinalImageUri,
 }: ImageEditorProps) => {
+  const ref = useRef<ViewShot | null>(null);
   const { panGesture, positionX, positionY } = usePanGesture();
   const { pinchGesture, scale } = usePinchGesture();
   const { rotationGesture, rotation } = useRotationGesture();
@@ -37,15 +42,23 @@ export const ImageEditor = ({
     ],
   }));
 
+  const onCapture = useCallback(() => {
+    captureRef(ref, {
+      format: "jpg",
+      quality: 1,
+    }).then((uri) => setFinalImageUri(uri));
+  }, []);
+
   return (
     <>
       <GestureDetector gesture={composed}>
-        <View style={[imageStyle, styles.container]}>
+        <ViewShot ref={ref} style={[imageStyle, styles.container]}>
           <Animated.Image source={source} style={[imageStyle, animatedStyle]} />
-        </View>
+        </ViewShot>
       </GestureDetector>
       <View style={styles.buttonsContainer}>
         <Button label="🗑️" onPress={removeImage} />
+        <Button label="✅" onPress={onCapture} />
       </View>
     </>
   );

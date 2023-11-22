@@ -1,7 +1,8 @@
 import { Camera, CameraCapturedPicture } from "expo-camera";
 import { useState } from "react";
-import { StyleSheet, View, Dimensions } from "react-native";
+import { Dimensions, Image, StyleSheet, Text, View } from "react-native";
 
+import Button from "./Button";
 import { CameraButton } from "./Camera/CameraButton";
 import { CameraDenied } from "./Camera/CameraDenied";
 import { CameraPermission } from "./Camera/CameraPermission";
@@ -14,6 +15,8 @@ export const IssueCreator = () => {
   const [ready, setReady] = useState(false);
 
   const [picture, setPicture] = useState<CameraCapturedPicture | undefined>();
+  const [finalImageUri, setFinalImageUri] = useState<string | undefined>();
+
   const takePicture = async () => {
     const picture = await camera?.takePictureAsync();
     setPicture(picture);
@@ -27,6 +30,25 @@ export const IssueCreator = () => {
     return <CameraPermission grant={requestPermissionCamera} />;
   }
 
+  if (finalImageUri) {
+    return (
+      <View style={styles.container}>
+        <Image source={{ uri: finalImageUri }} style={styles.picture} />
+        <Text style={styles.success}>
+          Your issue has been succesfully posted, our support team will get back
+          to you as soon as possible 👍
+        </Text>
+        <Button
+          label="New issue"
+          onPress={() => {
+            setFinalImageUri(undefined);
+            setPicture(undefined);
+          }}
+        />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       {picture ? (
@@ -34,6 +56,7 @@ export const IssueCreator = () => {
           source={picture}
           imageStyle={styles.picture}
           removeImage={() => setPicture(undefined)}
+          setFinalImageUri={setFinalImageUri}
         />
       ) : (
         <>
@@ -63,5 +86,13 @@ const styles = StyleSheet.create({
   picture: {
     height: targetHeight,
     width: Math.round(targetHeight * (9 / 16)),
+  },
+  success: {
+    position: "absolute",
+    fontSize: 16,
+    textAlign: "center",
+    color: "white",
+    padding: 50,
+    backgroundColor: "rgba(33, 135, 33, 0.8)",
   },
 });
