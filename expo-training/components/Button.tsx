@@ -17,7 +17,7 @@ export default function Button({ label, onPress }: ButtonProps) {
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    width: 320,
+    minWidth: 120,
     height: 68,
     marginHorizontal: 20,
     alignItems: "center",
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 10,
-    width: "100%",
+    minWidth: 120,
     height: "100%",
     alignItems: "center",
     justifyContent: "center",

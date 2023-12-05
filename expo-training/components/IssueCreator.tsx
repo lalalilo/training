@@ -1,11 +1,11 @@
 import { Camera, CameraCapturedPicture } from "expo-camera";
 import { useState } from "react";
-import { Image, StyleSheet, View, Dimensions } from "react-native";
+import { StyleSheet, View, Dimensions } from "react-native";
 
-import Button from "./Button";
 import { CameraButton } from "./Camera/CameraButton";
 import { CameraDenied } from "./Camera/CameraDenied";
 import { CameraPermission } from "./Camera/CameraPermission";
+import { ImageEditor } from "./ImageEditor/ImageEditor";
 
 export const IssueCreator = () => {
   const [permission, requestPermissionCamera] = Camera.useCameraPermissions();
@@ -30,19 +30,21 @@ export const IssueCreator = () => {
   return (
     <View style={styles.container}>
       {picture ? (
-        <Image source={picture} style={styles.picture} />
-      ) : (
-        <Camera
-          style={styles.picture}
-          ratio="16:9"
-          ref={(ref) => (camera = ref)}
-          onCameraReady={() => setReady(true)}
+        <ImageEditor
+          source={picture}
+          imageStyle={styles.picture}
+          removeImage={() => setPicture(undefined)}
         />
-      )}
-      {picture ? (
-        <Button label="🗑️" onPress={() => setPicture(undefined)} />
       ) : (
-        <CameraButton onPress={takePicture} disabled={!ready} />
+        <>
+          <Camera
+            style={styles.picture}
+            ratio="16:9"
+            ref={(ref) => (camera = ref)}
+            onCameraReady={() => setReady(true)}
+          />
+          <CameraButton onPress={takePicture} disabled={!ready} />
+        </>
       )}
     </View>
   );
