@@ -4,6 +4,7 @@ import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
 import { usePanGesture } from "./usePanGesture";
 import { usePinchGesture } from "./usePinchGesture";
+import { useRotationGesture } from "./useRotatationGesture";
 import Button from "../Button";
 
 type ImageEditorProps = {
@@ -19,14 +20,20 @@ export const ImageEditor = ({
 }: ImageEditorProps) => {
   const { panGesture, positionX, positionY } = usePanGesture();
   const { pinchGesture, scale } = usePinchGesture();
+  const { rotationGesture, rotation } = useRotationGesture();
 
-  const composed = Gesture.Simultaneous(pinchGesture, panGesture);
+  const composed = Gesture.Simultaneous(
+    pinchGesture,
+    panGesture,
+    rotationGesture,
+  );
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
       { scale: scale.value },
       { translateX: positionX.value },
       { translateY: positionY.value },
+      { rotateZ: `${(rotation.value / Math.PI) * 180}deg` },
     ],
   }));
 
