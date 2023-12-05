@@ -1,7 +1,8 @@
-import { ImageSourcePropType, StyleSheet, View } from "react-native";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { StyleSheet, View, ImageSourcePropType } from "react-native";
+import { GestureDetector, Gesture } from "react-native-gesture-handler";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
+import { usePanGesture } from "./usePanGesture";
 import { usePinchGesture } from "./usePinchGesture";
 import Button from "../Button";
 
@@ -16,12 +17,17 @@ export const ImageEditor = ({
   imageStyle,
   removeImage,
 }: ImageEditorProps) => {
+  const { panGesture, positionX, positionY } = usePanGesture();
   const { pinchGesture, scale } = usePinchGesture();
 
-  const composed = Gesture.Simultaneous(pinchGesture);
+  const composed = Gesture.Simultaneous(pinchGesture, panGesture);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
+    transform: [
+      { scale: scale.value },
+      { translateX: positionX.value },
+      { translateY: positionY.value },
+    ],
   }));
 
   return (
