@@ -1,33 +1,43 @@
 import { CameraCapturedPicture } from "expo-camera";
-import {
-    Dimensions,
-    Image,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from "react-native";
+import React from "react";
+import { Dimensions, Image, StyleSheet, View } from "react-native";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import Animated, {
+    useAnimatedStyle,
+    useSharedValue,
+} from "react-native-reanimated";
 
 interface PictureProps {
   picture: CameraCapturedPicture | null;
-  onClickBackButton: () => void;
 }
 
-export const Picture: React.FC<PictureProps> = ({
-  picture,
-  onClickBackButton,
-}) => {
+export const Picture: React.FC<PictureProps> = ({ picture }) => {
+  const scale = useSharedValue(1);
+  const savedScale = useSharedValue(1);
+
+  const pinchGesture = Gesture.Pinch()
+    .onUpdate((e) => {
+      scale.value = savedScale.value * e.scale;
+    })
+    .onEnd(() => {
+      savedScale.value = scale.value;
+    });
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
   if (!picture) {
     return null;
   }
+
   return (
     <View style={styles.container}>
-      <Image style={styles.image} source={picture} />
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={onClickBackButton}>
-          <Text style={styles.text}>Back to camera</Text>
-        </TouchableOpacity>
-      </View>
+      <GestureDetector gesture={pinchGesture}>
+        <Animated.View style={[styles.box, animatedStyle]}>
+          <Image style={styles.image} source={picture} />
+        </Animated.View>
+      </GestureDetector>
     </View>
   );
 };
@@ -35,27 +45,20 @@ export const Picture: React.FC<PictureProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
   },
   image: {
     flex: 1,
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
   },
-  buttonContainer: {
+  box: {
+    height: 120,
+    width: 120,
+    backgroundColor: "#b58df1",
+    borderRadius: 20,
+    marginBottom: 30,
     flex: 1,
-    flexDirection: "row",
-    backgroundColor: "transparent",
-    position: "absolute",
-    bottom: 100,
-  },
-  button: {
-    flex: 1,
-    alignSelf: "flex-end",
-    alignItems: "center",
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "white",
+    justifyContent: "center",
   },
 });

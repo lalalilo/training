@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 
-import { Picture } from "./Picture";
+import { PictureEditor } from "./PictureEditor";
 
 export default function App() {
   const [permission, requestPermission] = Camera.useCameraPermissions();
@@ -48,7 +48,7 @@ export default function App() {
 
   if (currentPhoto) {
     return (
-      <Picture
+      <PictureEditor
         picture={currentPhoto}
         onClickBackButton={() => setCurrentPhoto(null)}
       />
