@@ -1,3 +1,3 @@
 import { Text } from "react-native";
 
-export const HelloWorld = () => <Text>Hello world 👋</Text>;
+export const HelloWorld = () => <Text>Hello world</Text>;
