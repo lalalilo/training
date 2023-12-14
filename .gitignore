@@ -1,4 +1,5 @@
 __pycache__
 .pytest_cache
 app.egg-info
+.idea
 .terraform

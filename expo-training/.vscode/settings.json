@@ -1,0 +1,12 @@
+{
+  "files.exclude": {
+    "**/node_modules/**": true,
+    "**/.expo/**": true
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true,
+    "source.addMissingImports": true,
+    "source.organizeImports": true
+  },
+  "editor.formatOnSave": false,
+}
