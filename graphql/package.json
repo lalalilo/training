@@ -1,0 +1,21 @@
+{
+  "name": "graphql",
+  "version": "1.0.0",
+  "description": "Training for graphql",
+  "main": "index.ts",
+  "license": "MIT",
+  "scripts": {
+    "test:integration": "NODE_OPTIONS=\"--loader ts-node/esm\"  mocha \"./star-wars/**/*integration.ts\" -w"
+  },
+  "dependencies": {
+    "@types/chai": "^4.3.11",
+    "@types/mocha": "^10.0.6",
+    "chai": "^4.3.10",
+    "graphql": "^16.8.1",
+    "mocha": "^10.2.0",
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.4"
+  }
+}
