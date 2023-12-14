@@ -3,3 +3,6 @@ __pycache__
 app.egg-info
 .idea
 .terraform
+
+**/**node_modules
+
