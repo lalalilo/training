@@ -1,21 +1,15 @@
 import {
-    GraphQLEnumType,
-    GraphQLInterfaceType,
-    GraphQLList,
-    GraphQLNonNull,
-    GraphQLObjectType,
-    GraphQLSchema,
-    GraphQLString,
+  GraphQLEnumType,
+  GraphQLInterfaceType,
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLSchema,
+  GraphQLString,
 } from "graphql";
 import { getDroid, getFriends, getHero, getHuman } from "./data";
 
 /**
- * This is designed to be an end-to-end test, demonstrating
- * the full GraphQL stack.
- *
- * We will create a GraphQL schema that describes the major
- * characters in the original Star Wars trilogy.
- *
  * NOTE: This may contain spoilers for the original Star
  * Wars trilogy.
  */
@@ -255,7 +249,7 @@ const droidType = new GraphQLObjectType({
  * }
  * ```
  */
-const queryType = new GraphQLObjectType({
+export const queryType = new GraphQLObjectType({
   name: "Query",
   fields: () => ({
     hero: {

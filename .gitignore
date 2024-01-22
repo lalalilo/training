@@ -5,4 +5,5 @@ app.egg-info
 .terraform
 
 **/**node_modules
+**/**dist
 
