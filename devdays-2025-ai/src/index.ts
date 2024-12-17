@@ -1,5 +1,5 @@
 import { database } from "./database";
-import { embed, summarizeIssue } from "./openai";
+import { embed, generateMessage } from "./openai";
 
 const args = process.argv.slice(2);
 if (args.length === 0) {
@@ -9,24 +9,19 @@ if (args.length === 0) {
 const searchQuery = args.join(" ");
 
 const queryEmbed = await embed(searchQuery);
+// https://docs.turso.tech/features/ai-and-embeddings
+const distanceComputation = `vector_distance_cos(errors.embedding, vector32('[${queryEmbed.join(
+  ", "
+)}]'))`;
 const result =
-  await database.execute(`SELECT errors.id as id, errors.message as errorMessage, errors.created_at as createdAt, comments.message as comment, comments.created_at as commentCreatedAt, comments.sender as commentSender, vector_distance_cos(errors.embedding, vector32('[${queryEmbed.join(
-    ", "
-  )}]')) as distance
+  await database.execute(`SELECT errors.id as id, errors.message as errorMessage, errors.created_at as createdAt, comments.message as comment, comments.created_at as commentCreatedAt, comments.sender as commentSender, ${distanceComputation} as distance
 FROM errors
 LEFT JOIN comments ON errors.id = comments.errors_id
-WHERE
-        vector_distance_cos(errors.embedding, vector32('[${queryEmbed.join(
-          ", "
-        )}]')) < 0.1
-ORDER BY
-       vector_distance_cos(errors.embedding, vector32('[${queryEmbed.join(
-         ", "
-       )}]'))
-ASC;`);
+ORDER BY ${distanceComputation} ASC;`);
 // FIXME: Better handle the search limit
 
 const groups = Object.groupBy(result.rows, (row) => row.id as number);
+console.log(groups);
 const data = Object.values(groups).map((group) => ({
   message: group![0].errorMessage,
   comments: group!
@@ -38,4 +33,9 @@ const data = Object.values(groups).map((group) => ({
     })),
 }));
 
-console.log(await summarizeIssue(data));
+console.log(
+  await generateMessage(
+    "You are a specialized AI that reads Lalilo error reports and the comments written about them by the team. From a given JSON containing an error message and its comments, create a clear, brief summary sentence that captures the essence of the issue and its resolution. Focus on what happened and how it was resolved if that information is present. Also highlight any team member that could have context about it and the dates it happened.",
+    JSON.stringify(data, null, 2)
+  )
+);

@@ -5,6 +5,11 @@ export const database = createClient({
   url: "file:local.db",
 });
 
+// In this sample codebase we rely on an libsql (sqlite with other stuff) database to store the errors and comments data and vectors that result from embeddings
+// If you want to explore vector datases, you can have a look at:
+// - Chroma: https://www.trychroma.com/
+// - Pinecone: https://www.pinecone.io/
+
 export const reset = async (database: Client) => {
   const baseErrorsData = await Promise.all(
     [
