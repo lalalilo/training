@@ -6,31 +6,45 @@ const openai = new AzureOpenAI({
   apiVersion: "2024-08-01-preview",
 });
 
+// TODO: Fabien clean-up of available models
+enum AVAILABLE_MODELS {
+  GPT4O = "gpt-4o-devdays",
+  GPT4O_MINI = "gpt-4o-mini",
+  TEXT_EMBEDDING = "text-embedding-3-small",
+  DALL_E = "dall-e-3-devdays",
+}
+
+/*
+ If you wish to create embeddings ->
+*/
 export const embed = async (text: string | string[]) => {
   const res = await openai.embeddings.create({
     input: text,
-    model: "text-embedding-3-small",
+    model: AVAILABLE_MODELS.TEXT_EMBEDDING,
     dimensions: parseInt(process.env.EMBEDDING_DIMENSION!),
   });
 
   return res.data.map((item) => item.embedding);
 };
 
-export const summarizeIssue = async (data: object) => {
+export const generateMessage = async (system: string, user: string) => {
   const res = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
+    model: AVAILABLE_MODELS.GPT4O,
+    // All messages that will be sent to the LLM
+    // The LLM will answer with the next message in the chat
     messages: [
       {
-        role: "system",
-        content:
-          "You are a specialized AI that reads Lalilo error reports and the comments written about them by the team. From a given JSON containing an error message and its comments, create a clear, brief summary sentence that captures the essence of the issue and its resolution. Focus on what happened and how it was resolved if that information is present. Also highlight any team member that could have context about it and the dates it happened.",
+        role: "system", // Instructions given by the system are given more importance.
+        content: system,
       },
       {
-        role: "user",
-        content: JSON.stringify(data, null, 2),
+        role: "user", // You when you are asking a question to ChatGPT
+        content: user,
       },
     ],
   });
 
+  // res is a list of different answer possibilities
+  // The first one is the preferred one (more relevant)
   return res.choices[0].message.content;
 };

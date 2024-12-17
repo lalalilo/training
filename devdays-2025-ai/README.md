@@ -3,13 +3,22 @@
 To install dependencies:
 
 ```bash
+brew install bun
 bun install
 ```
+
+Copy environment variables:
+
+```bash
+cp .env.local.example .env.local
+```
+
+Modify .env with values from 1password "LaliloAIOpenAI".
 
 To run:
 
 ```bash
-bun run index.ts
-```
+bun run src/reset.ts
 
-This project was created using `bun init` in bun v1.1.30. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+bun run src/index.ts "query string"
+```
