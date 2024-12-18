@@ -1,4 +1,4 @@
-import { database } from "./database";
+import { database } from "./database/database";
 import { embed, generateMessage } from "./openai";
 
 const args = process.argv.slice(2);
@@ -11,7 +11,7 @@ const searchQuery = args.join(" ");
 const queryEmbed = await embed(searchQuery);
 // https://docs.turso.tech/features/ai-and-embeddings
 const distanceComputation = `vector_distance_cos(errors.embedding, vector32('[${queryEmbed.join(
-  ", ",
+  ", "
 )}]'))`;
 const result =
   await database.execute(`SELECT errors.id as id, errors.message as errorMessage, errors.created_at as createdAt, comments.message as comment, comments.created_at as commentCreatedAt, comments.sender as commentSender, ${distanceComputation} as distance
@@ -39,6 +39,6 @@ const data = Object.values(orderedGroups).map((group) => ({
 console.log(
   await generateMessage(
     "You are a specialized AI that reads Lalilo error reports and the comments written about them by the team. From a given JSON containing an error message and its comments, create a clear, brief summary sentence that captures the essence of the issue and its resolution. Focus on what happened and how it was resolved if that information is present. Also highlight any team member that could have context about it and the dates it happened.",
-    JSON.stringify(data, null, 2),
-  ),
+    JSON.stringify(data, null, 2)
+  )
 );
