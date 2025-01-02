@@ -54,3 +54,8 @@ bun run src/index.ts "country code"
   - Llama Index
   - Vercel AI SDK
 - [ ] Add more examples in db
+
+## Database
+
+You can connect to the database locally using an new SQLite Connection.
+Choosing the path of your local.db file for "Database path"
