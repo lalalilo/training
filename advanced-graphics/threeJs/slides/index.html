@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>reveal.js</title>
+
+    <link rel="stylesheet" href="dist/reset.css">
+    <link rel="stylesheet" href="dist/reveal.css">
+    <link rel="stylesheet" href="dist/theme/dracula.css"/>
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="plugin/highlight/monokai.css">
+    <script src="plugin/highlight/highlight.js"></script>
+    <script>
+        Reveal.initialize({
+            plugins: [RevealHighlight],
+        });
+    </script>
+</head>
+
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section>
+            <h1>Three.js</h1>
+            <h2>Introduction</h2>
+        </section>
+
+        <section data-auto-animate>
+            <h1>WebGL</h1>
+            <p>Web Graphics Library</p>
+        </section>
+
+        <section data-auto-animate>
+            <h1>WebGL</h1>
+            <ul>
+                <li><p>Low level JavaScript API for 2D and 3D graphics</p></li>
+                <li><p>Executed on GPU</p></li>
+                <li><p>based on OpenGL ES</p></li>
+            </ul>
+        </section>
+
+        <section data-auto-animate>
+            <h1>Three.js</h1>
+            <img data-src="images/three.svg" width="200px"/>
+        </section>
+
+        <section data-auto-animate>
+            <h1>Three.js</h1>
+            <ul>
+                <li><p>based on WebGL 2</p></li>
+                <li><p>High level API: easier to use</p></li>
+                <li><p>Still have access to the WebGL API underneath</p></li>
+            </ul>
+        </section>
+
+        <section>
+            <h1>Three.js basics</h1>
+            <ul>
+                <li><p>Scene</p></li>
+                <li><p>Camera</p></li>
+                <li><p>Renderer</p></li>
+            </ul>
+        </section>
+
+        <section>
+            <h1>Let's practice!</h1>
+            <p>Go to the practice folder and follow the readme</p>
+        </section>
+    </div>
+</div>
+
+<script src="dist/reveal.js"></script>
+<script src="plugin/notes/notes.js"></script>
+<script src="plugin/markdown/markdown.js"></script>
+<script>
+    Reveal.initialize({
+        hash: true,
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+    });
+</script>
+</body>
+
+</html>
