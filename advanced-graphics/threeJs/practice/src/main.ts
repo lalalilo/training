@@ -30,11 +30,12 @@ scene.add(cube); // Add cube to the scene
 
 // Light
 const pointLight = new THREE.PointLight(0xffffff)
-pointLight.position.set(1,1,1)
+pointLight.position.set(0,0.3,1)
 const lightHelper = new THREE.PointLightHelper(pointLight)
 scene.add(pointLight, lightHelper)
 
 const ambientLight = new THREE.AmbientLight(0xffffff)
+ambientLight.intensity = 0.5
 scene.add(ambientLight)
 
 
@@ -46,11 +47,57 @@ function animate() {
     renderer.render(scene, camera);
 }
 
-
 // Handle Window Resize
 window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
+});
+
+camera.lookAt(cube.position);
+
+// Track Dragging
+let isDragging = false;
+let previousMousePosition = { x: 0, y: 0 };
+const rotationSpeed = 0.005; // Control sensitivity
+
+document.addEventListener('mousedown', (event) => {
+    isDragging = true;
+    previousMousePosition.x = event.clientX;
+    previousMousePosition.y = event.clientY;
+});
+
+document.addEventListener('mouseup', () => {
+    isDragging = false;
+});
+
+document.addEventListener('mousemove', (event) => {
+    if (!isDragging) return;
+
+    // Calculate Mouse Movement
+    const deltaX = event.clientX - previousMousePosition.x;
+    const deltaY = event.clientY - previousMousePosition.y;
+
+    // Update Previous Position
+    previousMousePosition.x = event.clientX;
+    previousMousePosition.y = event.clientY;
+
+    // Update Camera Position
+    const angleX = deltaX * rotationSpeed;
+    const angleY = deltaY * rotationSpeed;
+
+    // Apply Rotation
+    const currentPos = camera.position.clone();
+    const spherical = new THREE.Spherical();
+    spherical.setFromVector3(currentPos.sub(cube.position));
+
+    spherical.theta -= angleX; // Horizontal rotation
+    spherical.phi -= angleY; // Vertical rotation
+    spherical.phi = Math.max(0.1, Math.min(Math.PI - 0.1, spherical.phi)); // Clamp vertical angle
+
+    // Convert spherical coordinates back to Cartesian
+    const newPos = new THREE.Vector3().setFromSpherical(spherical);
+    camera.position.copy(newPos.add(cube.position));
+    camera.lookAt(cube.position);
 });
 
