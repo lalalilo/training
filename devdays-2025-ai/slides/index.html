@@ -2,42 +2,724 @@
 <html lang="en">
 
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-	<title>Lalilo Devdays 2025 - AI</title>
+  <title>Lalilo Devdays 2025 - AI</title>
 
-	<link rel="stylesheet" href="dist/reset.css">
-	<link rel="stylesheet" href="dist/reveal.css">
-	<link rel="stylesheet" href="dist/theme/black.css">
+  <link rel="stylesheet" href="dist/reset.css">
+  <link rel="stylesheet" href="dist/reveal.css">
+  <link rel="stylesheet" href="dist/theme/custom.css">
 
-	<!-- Theme used for syntax highlighted code -->
-	<link rel="stylesheet" href="plugin/highlight/monokai.css">
+  <!-- Theme used for syntax highlighted code -->
+  <link rel="stylesheet" href="plugin/highlight/monokai.css">
+
+  <!-- Adding tailwind through CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            yellow: '#F7DD71',
+            red: '#F97E72',
+            green: '#73F1B8',
+            darker: "#101214"
+          }
+        }
+      }
+    }
+  </script>
 </head>
 
 <body>
-	<div class="reveal">
-		<div class="slides">
-			<section>Slide 1</section>
-			<section>Slide 2</section>
-		</div>
-	</div>
+  <div class="reveal">
+    <div class="slides">
+      <section>
+        <div class="r-stack overflow-hidden">
+          <h1 class="fragment fade-out-down custom" data-fragment-index="1">Become an AI Wizard</h1>
+          <h1 class="fragment fade-in-down custom" data-fragment-index="1">Generative AI Demystified</h1>
+        </div>
+        <h2> Lalilo - Devdays 2025</h2>
 
-	<script src="dist/reveal.js"></script>
-	<script src="plugin/notes/notes.js"></script>
-	<script src="plugin/markdown/markdown.js"></script>
-	<script src="plugin/highlight/highlight.js"></script>
-	<script>
-		// More info about initialization & config:
-		// - https://revealjs.com/initialization/
-		// - https://revealjs.com/config/
-		Reveal.initialize({
-			hash: true,
+        <aside class="notes" data-markdown>
+          Faux titre du training.
 
-			// Learn about plugins: https://revealjs.com/plugins/
-			plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
-		});
-	</script>
+          Grosse hype AI depuis quelques années, tout le monde veut en faire, des entreprises veulent remplacer des
+          salariés avec, ça a l'air magique et mystérieux.
+
+          Devenir un prompt engineer ou perdre son taff? : **Lecture simpliste et pas l'objectif de ce training**
+
+          ---
+
+          Hype IA = techno génératives => LLM (chatgpt)
+
+          Il y a pas réelement d'intelligence dedans (au sens pas un système expert)
+
+          En l'état actuel, un nouvel outil pour notre travail plutôt qu'un profond changement de paradigme
+        </aside>
+      </section>
+
+      <section>
+        <h2>Goals</h2>
+        <ul>
+          <li class="fragment fade-left">Understand how AI models work</li>
+          <li class="fragment fade-left">Know Renaissance's stance on the topic</li>
+          <li class="fragment fade-left">Understand how developers can use them in products they build</li>
+          <li class="fragment fade-left">Get some hands-on experience</li>
+        </ul>
+      </section>
+
+      <section class="flex flex-col">
+        <h2>What exactly is a
+          <br />
+          <span class="font-bold">
+            <span class="fragment highlight-current-red" data-fragment-index="3">
+              Large
+            </span>
+
+            <span class="fragment highlight-current-red" data-fragment-index="2">
+              Language
+            </span>
+
+            <span class="fragment highlight-current-red" data-fragment-index="1">
+              Model
+            </span>
+          </span>
+          <br />?
+        </h2>
+
+        <aside class="notes" data-markdown>
+          **Model** = modèle probabiliste, basé sur des réseaux de neurones : modèle = simuler une fonction
+
+          **Language** = langage => fr, en, JS, ...
+
+          **Large** = beaucoup de paramètres dans le réseau de neurones
+
+          LLM = Modèle probabiliste d'une Language
+
+          On donne des mots en input et on récupère quels sont les mots suivants les plus probables.
+
+          Notion de **contexte** = mémoire du LLM => après n inputs la donnée disparait de la mémoire du réseau
+
+          Il existe des modèles **multimodaux** (images + texte) et des modèles **multilingues**
+        </aside>
+      </section>
+
+      <section>
+        <h3>Who creates them?</h3>
+
+        <p>
+          Only <strong>big specialized companies</strong> can afford to train LLMs
+        </p>
+
+        <div class="flex flex-row space-between</div> *:w-10 gap-10 justify-center">
+          <img src="assets/openai.svg" />
+          <img src="assets/anthropic.svg" />
+          <img src="assets/mistral.svg" />
+          <img src="assets/meta.svg" />
+        </div>
+
+        <aside class="notes" data-markdown>
+          LLM = **Réseau de neurones** => il faut l'entrainer pour lui faire apprendre la fonctionnalité "**pour une
+          suite
+          de mots, prédire le prochain le plus probable**"
+
+          Plein de données => tu input un début de phrase, tu évalues la proba des mots qui suivent
+
+          Demande plein de données, plein de temps, c'est cher, c'est compliqué, c'est cher en temps de calcul.
+
+          Un modèle entrainé = l'ensemble des pondérations des noeuds du réseau => poids du modèle = nombre de noeuds.
+
+          Ordre de grandeur => **GPT3 = 175 billion parameters** (1 param = 1 float) = **quelques centaines de Go**,
+          mais il en
+          existe des plus petits qui peuvent être embarqués dans une application (qq Go)
+
+          Plus gros modèle = capacité de généralisation plus large = plus "performant" sur plus de taches différentes
+          (approximation grossière)
+        </aside>
+      </section>
+
+      <section>
+        <h3>How to use these models</h3>
+
+        <div class="flex flex-row gap-10 text-base gap-10 mt-10">
+          <div class="w-1/2">
+            <p><strong>Using an API</strong></p>
+
+            <ul>
+              <li class="text-green">Easy to use</li>
+              <li class="text-green">No need to worry about infrastructure</li>
+              <li class="text-green">No hardware needs</li>
+              <li class="text-red">Expensive</li>
+              <li class="text-red">Need to be careful with privacy</li>
+            </ul>
+          </div>
+
+          <div class="w-1 bg-yellow"> </div>
+
+          <div class="w-1/2">
+            <p><strong>Using a local model</strong></p>
+
+            <ul>
+              <li class="text-green">Cheaper</li>
+              <li class="text-green">Doesn't depend on internet access</li>
+              <li class="text-red">Requires a powerful machine or a very light model</li>
+              <li class="text-red">Not a lot of models support this</li>
+            </ul>
+          </div>
+      </section>
+
+      <section>
+        <h3>AzureAI</h3>
+
+        <div class="r-stack">
+          <p class="fragment fade-out-down custom" data-fragment-index="1">
+            Microsoft's AI platform
+            <br />
+            Offers a wide range of base models and APIs to use them.
+          </p>
+
+          <image src="./assets/azureai-models.png" class="!mx-auto fragment fade-in-down custom"
+            data-fragment-index="1" />
+        </div>
+
+        <a class="text-base"
+          href="https://www.notion.so/lalilo/AzureAI-Lalilo-set-up-doc-fba22697adf844e4aaa77e62ac681fb4?pvs=25">Notion
+          documentation for our AzureAI setup</a>
+
+        <aside class="notes" data-markdown>
+          Il y a aussi des modèles de speech, de computer vision, de modération.
+
+          Pourquoi ne pas utiliser directement les API OpenAI?
+          - **Privacy** ⇒ les technos utilisées doivent être validées par renaissance
+          - RL a un contrat préexistant pour Azure AI pour les explorations et le billing ne nous est assigné à ce
+          jour (à condition qu'il reste pas trop cher ⇒ on a mis un warning à 50$ par mois mais ça reste conservateur à
+          priori par rapport à l'échelle de RL)
+          - Azure AI est un hub qui met à disposition de nombreux outils qui couvrent la majorité des usecases ⇒ un bon
+          starting point
+
+          Why not AWS?
+          - Bedrock ⇒ RL also has a contract but we don't have access yet
+          - RL loves Microsoft ⇒ bigger contracts = easier to negotiate
+          - **Microsoft mise bcp sur l'IA**, il veulent être premiers dessus = Ils ont fait un partenariat avec OpenAI
+          assez tot ⇒
+          open ai apis sur azure AI + Copilot (Github = Microsoft) ⇒ d'où seulement OpenAI sur copilot pendant longtemps
+        </aside>
+      </section>
+
+      <section>
+        <h3>Key models</h3>
+
+        <table class="text-base">
+          <thead class="text-yellow">
+            <tr>
+              <th>Model</th>
+              <th>Input cost<sup>*</sup></th>
+              <th>Output cost<sup>*</sup></th>
+              <th>On AzureAI</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr>
+              <td class="flex flex-row gap-3 items-center">
+                <image src="./assets/openai.svg" class="w-10" />
+                gpt-4o-mini
+              </td>
+              <td class="!text-center align-middle">$0.150</td>
+              <td class=" !text-center align-middle">$0.6</td>
+              <td class="!text-center align-middle">✅</td>
+            </tr>
+
+            <tr>
+              <td class="flex flex-row gap-3 items-center">
+                <image src="./assets/openai.svg" class="w-10" />
+                gpt-4o
+              </td>
+              <td class="!text-center align-middle">$2.5</td>
+              <td class="!text-center align-middle">$10</td>
+              <td class="!text-center align-middle">✅</td>
+            </tr>
+
+            <tr>
+              <td class="flex flex-row gap-3 items-center">
+                <image src="./assets/openai.svg" class="w-10" />
+                o1
+              </td>
+              <td class="!text-center align-middle">$15</td>
+              <td class="!text-center align-middle">$60</td>
+              <td class="!text-center align-middle">⏳</td>
+            </tr>
+
+            <tr>
+              <td class="flex flex-row gap-3 items-center">
+                <image src="./assets/anthropic.svg" class="w-10" />
+                Sonnet 3.5
+              </td>
+              <td class="!text-center align-middle">$3</td>
+              <td class="!text-center align-middle">$15</td>
+              <td class="!text-center align-middle">❌</td>
+            </tr>
+
+            <tr>
+              <td class="flex flex-row gap-3 items-center">
+                <image src="./assets/meta.svg" class="w-10" />
+                Llama 3
+              </td>
+              <td class="!text-center align-middle">Free</td>
+              <td class="!text-center align-middle">Free</td>
+              <td class="!text-center align-middle">✅</td>
+            </tr>
+
+            <tr>
+              <td class="flex flex-row gap-3 items-center">
+                <image src="./assets/mistral.svg" class="w-10" />
+                Mistral Large
+              </td>
+              <td class="!text-center align-middle">2$</td>
+              <td class="!text-center align-middle">6$</td>
+              <td class="!text-center align-middle">✅</td>
+            </tr>
+
+          </tbody>
+        </table>
+
+        <span class="text-xs">* Cost per 1M tokens</span>
+
+        <aside class="notes" data-markdown>
+          - **OpenAI** = market leader, a lancé la nouvelle vague de LLMs avec ChatGPT
+          - Petit modèle = embarquable dans une appli, moins performant mais plus rapide, beaucoup moins cher
+          - Moyen modèle = bon compromis performance / coût pour une appli LLM centric (chatGPT, Claude)
+          - Gros modèle = arms-race recherche, très lent, pas forcément user centric (cf o3)
+          - **Anthropic** = Le challenger, très reconnu notament pour Sonnet 3.5 v2 très performant, mais aussi Haiku
+          (petit) et Opus (gros)
+          - **Meta** vise plutot l'open source et sont les premiers dans le domaine
+        </aside>
+      </section>
+
+      <section>
+        <h3>TODO: Hands-on</h3>
+      </section>
+
+      <section>
+        <h2>What does it change for us?</h2>
+
+        <aside class="notes" data-markdown>
+          As mentioned earlier, LLMs development/optimization is more of a data science task than a software
+          engineering one.
+
+          However, we are the ones who will use them in our products: how to integrate LLMs in our products?
+        </aside>
+      </section>
+
+      <section>
+        <section>
+          <h3>Github Copilot, a well-known LLM-based product</h3>
+
+          <p>It can do a few things base models can't do:</p>
+        </section>
+
+        <section>
+          <image src="./assets/copilot-1.png" class="w-full !mx-auto rounded" />
+
+          <p>Taking the edition context into account, including open tabs.</p>
+        </section>
+
+        <section>
+          <image src="./assets/copilot-2.png" class="w-full !mx-auto rounded" />
+
+          <p>Processing the codebase and answering related questions</p>
+        </section>
+
+        <section>
+          <image src="./assets/copilot-3.png" class="w-full !mx-auto rounded" />
+
+          <p>Generating code edits in a purpose built view</p>
+        </section>
+
+        <section><strong>How does this work?</strong></section>
+      </section>
+
+      <section>
+        <h3>LLMs strengths and weaknesses</h3>
+
+        <div class="flex flex-row gap-10 text-base mt-10">
+          <div class="w-1/2">
+            <p class="text-green"><strong>Strengths</strong></p>
+            <ul>
+              <li class="text-green">Interpret and generate natural language, sounds, images
+                <br />
+                <span class="fragment" data-fragment-index="1">
+                  => <strong>Create new kind of UIs (chat, voice)</strong>
+                </span>
+              </li>
+
+              <li class="text-green">Can handle imprecise inputs (typos, unclear instructions)
+                <br />
+                <span class="fragment" data-fragment-index="1">
+                  => <strong>Process unstructured data more easily</strong>
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="w-1 bg-yellow"> </div>
+
+          <div class="w-1/2">
+            <p class="text-red"><strong>Weaknesses</strong></p>
+            <ul>
+              <li class="text-red">Non-deterministic outputs
+                <br />
+                <span class="fragment" data-fragment-index="1">
+                  => <strong>Evaluations</strong>
+                  <br />
+                  => <strong>Keeping a small scope</strong>
+                </span>
+              </li>
+
+              <li class="text-red">New kinds of security risks
+                <br />
+                <span class="fragment" data-fragment-index="1">
+                  => <strong>Guards</strong>
+                </span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <aside class="notes" data-markdown>
+          - **New kind of UIs**: More fuzzy interactions than traditional ones, or even custom UIs tailormade for a user
+          - **Data processing**: Way easier to extract information from a text, a sound, an image
+          - **Evaluations**: How to measure quality in a non-deterministic context? Pretty much like tests
+          - **Keeping a small scope**: Limiter la complexité d'une tâche permet d'avoir des résultats plus fiables
+          - **Guards**: How to prevent the model from doing something it shouldn't do? (racism, sexism, ...) Similar
+          task to a validator, like yup
+        </aside>
+      </section>
+
+      <section>
+        <section>
+          <h3>Are we actually ok with these risks?</h3>
+        </section>
+
+        <section>
+          <p>RL wants to get ready so that we<br /><strong>don't get overwhelmed</strong><br />by new concurrents.</p>
+          <br />
+          <p class="fragment fade-up">But we should do it <br /><strong>responsibly</strong><br />to avoid putting the
+            company at risk.</p>
+        </section>
+
+        <section>
+          <p>As a result,<br /><strong>we should always have a human in the loop</strong>,
+            <br />particularly when dealing with students.
+          </p>
+        </section>
+
+        <section class="*:text-left">
+          <p><a href="https://renlearncrm.sharepoint.com/sites/TheRenaissanceAICenterofExcellence">Renaissance AI Center
+              of
+              Excellence
+            </a> gathers all AI initiatives for RL.</p>
+          <p>This includes
+          <ul>
+            <li>List of available chat interfaces</li>
+            <li>List of approved AI tools</li>
+            <li><a
+                href="https://renlearncrm.sharepoint.com/sites/Compliance/Information%20Security%20Policies/Information%20Security%20Policy/AI%20Applications%20-%20Use%20Requirements.pdf?CID=0c2cf8f7-ff1a-44cf-bd07-c40a15411984">
+                AI Applications Use Requirements</a>
+              </p>
+            </li>
+          </ul>
+
+        </section>
+      </section>
+
+      <section>
+        <!-- TODO: improve me -->
+        <h3>So, how do we get ready?</h3>
+
+        <p class="fragment fade-up">By knowing about the following tools...</p>
+      </section>
+
+      <section>
+        <h4>Prompt engineering</h4>
+
+        <section>
+          <p>
+            Improving prompting skills makes it possible to use models to their full
+            potential.
+          </p>
+        </section>
+
+        <section>
+          <ul>
+            <li>
+              <a href="https://learnprompting.org/docs/introduction">Prompt engineering guide</a>
+            </li>
+
+            <li>
+              <a href="https://www.notion.so/Learn-prompting-283e9537fea54bd7b97feec7413d7b5c">
+                A summary of the guide on Notion
+              </a>
+            </li>
+          </ul>
+        </section>
+
+        <aside class="notes" data-markdown>
+          Technique basée sur l’expérience qui permet de créer des inputs qui augementent les chances d’avoir une
+          réponse satisfaisante ⇒ c’est aux LLMs ce que le code est aux ordinateurs, le langage de programmation des
+          LLM.
+
+          Un bon prompting = utiliser le modèle au maximum de ses capacités
+
+          On peut prompter un modèle pour nous aider à créer des prompts quali!
+        </aside>
+      </section>
+
+      <section>
+        <h4>Structured outputs</h4>
+
+        <section>
+          <p>
+            Make the LLM output data in a code-compatible format, like JSON.
+          </p>
+        </section>
+
+        <section>
+          <ul>
+            <li>
+              <a href="https://platform.openai.com/docs/guides/structured-outputs">OpenAI API stuctured output doc</a>
+            </li>
+
+            <li>
+              <a href="https://sdk.vercel.ai/docs/ai-sdk-core/generating-structured-data">Vercel's AI SDK structured
+                output doc</a>, it uses <a href="https://zod.dev/">Zod</a>
+            </li>
+          </ul>
+        </section>
+
+        <aside class="notes" data-markdown>
+          La plupart des libs d'utilitaires LLMs permettent de formater les outputs en JSON
+          Les API OpenAI le permettent nativement.
+        </aside>
+      </section>
+
+
+      <section>
+        <h4>Guards</h4>
+
+        <section>
+          <p>
+            Prevent the model from generating unwanted outputs.
+          </p>
+        </section>
+
+        <section>
+          <image src="./assets/guardrails.png" class="w-full !mx-auto rounded" />
+          <a href="https://www.guardrailsai.com/">Guardrails AI</a>
+        </section>
+
+        <aside class="notes" data-markdown>
+          Guards = controler les inputs et les outputs d'un modèle et y appliquer des règles:
+          - Pour préserver la privacy de certaines données
+          - Pour éviter des outputs inappropriés
+
+          Certaines guardes peuvent être basées sur du code normal (les structures output sont une forme de guard par
+          exemple), d'autres sur d'autres LLM (vérifier que la réponse générée est écrite en bon français par exemple)
+        </aside>
+      </section>
+
+      <section>
+        <h4>Evaluations</h4>
+
+        <section>
+          <p>
+            Define success metrics for a task and evaluate the model against them on a dataset.
+          </p>
+        </section>
+
+        <section>
+          <ul>
+            <li>
+              <a href="https://docs.confident-ai.com/">Deepeval</a> (Python)
+            </li>
+
+            <li>
+              <a href="https://ts.llamaindex.ai/docs/llamaindex/modules/evaluation">LlamaIndex doc on evaluation</a>
+            </li>
+          </ul>
+        </section>
+
+        <aside class="notes">
+          - Quantifier la qualité d’un prompt
+          - Valider qu’un changement de modèle ou de prompt n’impacte pas négativement la qualité du produit
+          - Comme les tests automatisés en dev: prompt = code, model = version de node
+          - Tests non déterministes donc on doit calculé un score aggrégé sur plusieurs runs
+          - Certaines métriques définies par du code, d'autres par d'autres LLMs
+        </aside>
+      </section>
+
+      <section>
+        <h4>Indexing and Retrieval Augmented Generation</h4>
+
+        <section>
+          <p>
+            Using <strong>embeddings</strong> to index data and retrieve it efficiently to provide context to a
+            model.
+          </p>
+        </section>
+
+        <section>
+          <p>
+            <strong>Embedding</strong> = a vector representation of a text that can be compared to other embeddings to
+            find similar texts
+          </p>
+        </section>
+
+        <section>
+          <p>
+            A <strong>vector database</strong> can be used to store embeddings of the context we want to access along
+            with utility tools to retrieve them.
+          </p>
+        </section>
+
+        <section>
+          <ul>
+            <li><a href="https://github.com/pgvector/pgvector">PGvector</a>: a postgres extension to have it handle
+              embedding vectors</li>
+
+            <li><a href="https://www.pinecone.io/">Pinecone</a>: a vector database</li>
+
+            <li><a href="https://www.trychroma.com/">Chroma</a>: another vector database</li>
+
+            <li>
+              <a href="https://ts.llamaindex.ai/docs/llamaindex/guide/agents/4_agentic_rag">LlamaIndex doc on RAG</a>
+            </li>
+
+            <li><a href="https://sdk.vercel.ai/docs/guides/rag-chatbot#rag-chatbot-guide">Vercel's AI SDK RAG chatbot
+                guide</a></li>
+          </ul>
+        </section>
+
+        <aside class="notes" data-markdown>
+          Ex: Copilot qui sait dans quel fichier regarder pour répondre à une question
+
+          Taille du contexte ⇒ tu peux pas envoyer toute la base de code à chaque question (+ ça couterait très cher)
+
+          - Creation du projet ⇒ embed tous les fichiers du projets (comment bien découper les fichiers?)
+          - Au moment de poser une question
+          - embed la question
+          - identifier les fichiers pertinents (sémantiquement plus proches)
+          - Lire ces fichier seulement et le intégrer dans le contexte du LLM
+          - Faire générer une réponse au LLM
+
+          On calcule un embedding avec un modèle spécialisé: modèle qui prend du texte et sort des vecteurs. 2 textes
+          proches retournent retournent des vecteurs proches (Bcp plus léger que les modèles LLM)
+        </aside>
+      </section>
+
+      <section>
+        <h4>Tools and agents</h4>
+
+        <section>
+          <p>
+            <strong>Agent</strong> = Making an LLM autonomous to perform a specific task
+          </p>
+        </section>
+
+        <section>
+          <p>Autonomy often relies on <strong>tools</strong> that enables interactions with other systems.</p>
+          <p>Tools can be simple code or other AI systems</p>
+        </section>
+
+        <section>
+          <p>Tools examples:</p>
+
+          <ul>
+            <li class="fade-left fragment">Retrieval part of a RAG system</li>
+            <li class="fade-left fragment">Access to an external API</li>
+            <li class="fade-left fragment">Access to domain code that could help the LLM (ex: computing a success rate)
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <ul>
+            <li><a href="https://platform.openai.com/docs/assistants/tools">OpenAI API doc for tools</a></li>
+            <li><a href="https://sdk.vercel.ai/docs/foundations/tools#tools">Vercel's AI SDK doc for tools</a></li>
+            <li><a href="https://ts.llamaindex.ai/docs/llamaindex/guide/agents/1_setup">LlamaIndex agents doc</a></li>
+          </ul>
+        </section>
+      </section>
+
+      <section>
+        <h2>Resources</h2>
+
+        <section>
+          <ul class="text-base">
+            <li><a href="https://youtu.be/LPZh9BOjkQs?si=wVl4NP5iQWeYkuKF">Large Language Models explained
+                briefly</a>:
+              A short video explaining how LLM models work
+            </li>
+
+            <li><a href="https://vercel.com/blog/eval-driven-development-build-better-ai-faster">Eval-driven
+                development:
+                Build better AI faster</a>: Vercel's evals strategy for AI-native development</li>
+
+            <li><a href="https://www.oneusefulthing.org/p/centaurs-and-cyborgs-on-the-jagged">Centaurs and Cyborgs on
+                the
+                Jagged Frontier</a>: Different ways to interract with AI our working tasks</li>
+
+            <li><a href="https://addyo.substack.com/p/future-proofing-your-software-engineering">Future-proofing your
+                Software Engineering career</a>: What impact on our day to day work as software engineers</li>
+
+            <li><a href="https://www.ontestautomation.com/i-am-tired-of-ai/">I am tired of AI</a>: For a more
+              sceptical point of view on the ongoing hype</li>
+          </ul>
+        </section>
+      </section>
+    </div>
+  </div>
+
+  <style>
+    .fragment.fade-out-down {
+      opacity: 1;
+    }
+
+    .fragment.fade-out-down.visible {
+      opacity: 0;
+      transform: translateY(100%);
+      transition: all 0.2s ease;
+    }
+
+    .fragment.fade-in-down {
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+
+    .fragment.fade-in-down.visible {
+      opacity: 1;
+      transform: translateY(0);
+      transition: all 0.2s ease;
+    }
+  </style>
+  <script src="dist/reveal.js"></script>
+  <script src="plugin/notes/notes.js"></script>
+  <script src="plugin/markdown/markdown.js"></script>
+  <script src="plugin/highlight/highlight.js"></script>
+  <script>
+    // More info about initialization & config:
+    // - https://revealjs.com/initialization/
+    // - https://revealjs.com/config/
+    Reveal.initialize({
+      hash: true,
+      controls: false,
+
+      // Learn about plugins: https://revealjs.com/plugins/
+      plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+    });
+  </script>
 </body>
 
 </html>
