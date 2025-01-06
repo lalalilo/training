@@ -3,6 +3,10 @@ import * as THREE from 'three';
 // Scene
 const scene = new THREE.Scene();
 
+// Axes
+const axesHelper = new THREE.AxesHelper( 5 );
+scene.add( axesHelper );
+
 // Camera
 const camera = new THREE.PerspectiveCamera(
     75, // Field of view
@@ -20,9 +24,19 @@ document.body.appendChild(renderer.domElement); // Add renderer to the DOM
 
 // Cube Geometry, Material, and Mesh
 const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshBasicMaterial({color: 0x00ff00, wireframe: true}); // Green
+const material = new THREE.MeshStandardMaterial({color: 0x00ff00}); // Green
 const cube = new THREE.Mesh(geometry, material);
 scene.add(cube); // Add cube to the scene
+
+// Light
+const pointLight = new THREE.PointLight(0xffffff)
+pointLight.position.set(1,1,1)
+const lightHelper = new THREE.PointLightHelper(pointLight)
+scene.add(pointLight, lightHelper)
+
+const ambientLight = new THREE.AmbientLight(0xffffff)
+scene.add(ambientLight)
+
 
 // Animation Loop
 function animate() {
