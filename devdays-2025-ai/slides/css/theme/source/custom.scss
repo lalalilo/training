@@ -84,4 +84,17 @@ $inlineCodeColor: $green;
     code {
         color: var(--r-inline-code-color);
     }
+
+    a {
+        color: #F7DD71;
+        text-decoration: underline;
+        text-underline-offset: 4px;
+        font-weight: 500;
+
+        &:hover {
+            background-color: #F7DD71;
+            text-decoration: none;
+            color: #252334;
+        }
+    }
 }
