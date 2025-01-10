@@ -4,10 +4,6 @@
  * By Hakim El Hattab, http://hakim.se
  */
 @import url(./fonts/source-sans-pro/source-sans-pro.css);
-section.has-light-background, section.has-light-background h1, section.has-light-background h2, section.has-light-background h3, section.has-light-background h4, section.has-light-background h5, section.has-light-background h6 {
-  color: #222;
-}
-
 /*********************************************
  * GLOBAL STYLES
  *********************************************/
@@ -33,7 +29,7 @@ section.has-light-background, section.has-light-background h1, section.has-light
   --r-code-font: monospace;
   --r-link-color: #614D85;
   --r-link-color-dark: rgb(82.45, 65.45, 113.05);
-  --r-link-color-hover: rgb(117.7857142857, 93.5, 161.5);
+  --r-link-color-hover: #614D85;
   --r-selection-background-color: #614D85;
   --r-selection-color: #fff;
   --r-overlay-element-bg-color: 240, 240, 240;
@@ -382,7 +378,7 @@ section.has-light-background, section.has-light-background h1, section.has-light
   --r-code-font: monospace;
   --r-link-color: #614D85;
   --r-link-color-dark: rgb(82.45, 65.45, 113.05);
-  --r-link-color-hover: rgb(117.7857142857, 93.5, 161.5);
+  --r-link-color-hover: #614D85;
   --r-selection-background-color: #614D85;
   --r-selection-color: #fff;
   --r-overlay-element-bg-color: 240, 240, 240;
@@ -734,4 +730,22 @@ section.has-light-background, section.has-light-background h1, section.has-light
   background-color: #F7DD71;
   text-decoration: none;
   color: #252334;
+}
+.reveal .slide-number {
+  background-color: transparent;
+  color: #614D85;
+  left: 8px;
+  bottom: 8px;
+  font-family: unset;
+  font-size: 20px;
+}
+.reveal .slide-number > a {
+  text-decoration: none;
+}
+.reveal .slide-number > a:hover {
+  background-color: transparent;
+  color: #614D85;
+}
+.reveal .controls {
+  transform: scale(0.5);
 }

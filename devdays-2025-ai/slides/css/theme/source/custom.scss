@@ -32,16 +32,11 @@ $headingFontWeight: 600;
 $selectionBackgroundColor: #614D85;
 $selectionColor: #fff;
 $linkColor: #614D85;
-$linkColorHover: color.scale($linkColor, $lightness: 15%);
-
+$linkColorHover: $linkColor;
 $heading1Size: 2.5em;
 $heading2Size: 1.6em;
 $heading3Size: 1.3em;
 $heading4Size: 1.0em;
-
-// Change text colors against light slide backgrounds
-@include light-bg-text-color(#222);
-
 
 // Theme template ------------------------------
 @import "../template/theme";
@@ -96,5 +91,28 @@ $inlineCodeColor: $green;
             text-decoration: none;
             color: #252334;
         }
+    }
+
+    .slide-number {
+        background-color: transparent;
+        color: #614D85;
+        left: 8px;
+        bottom: 8px;
+        font-family: unset;
+        font-size: 20px;
+
+        &>a {
+            text-decoration: none;
+
+            &:hover {
+                background-color: transparent;
+                color: #614D85;
+            }
+        }
+
+    }
+
+    .controls {
+        transform: scale(0.5);
     }
 }
