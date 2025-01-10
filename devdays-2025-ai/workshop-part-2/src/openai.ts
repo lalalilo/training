@@ -6,11 +6,10 @@ const openai = new AzureOpenAI({
   apiVersion: "2024-08-01-preview",
 });
 
-// TODO: Fabien clean-up of available models
 enum AVAILABLE_MODELS {
   GPT4O = "gpt-4o-devdays",
-  GPT4O_MINI = "gpt-4o-mini",
-  TEXT_EMBEDDING = "text-embedding-3-small",
+  GPT4O_MINI = "gpt-4o-mini-devdays",
+  TEXT_EMBEDDING = "text-embedding-3-small-devdays",
   DALL_E = "dall-e-3-devdays",
 }
 
@@ -29,7 +28,7 @@ export const embed = async (text: string | string[]) => {
 
 export const generateMessage = async (system: string, user: string) => {
   const res = await openai.chat.completions.create({
-    model: AVAILABLE_MODELS.GPT4O,
+    model: AVAILABLE_MODELS.GPT4O_MINI,
     // All messages that will be sent to the LLM
     // The LLM will answer with the next message in the chat
     messages: [

@@ -18,7 +18,6 @@ const result =
 FROM errors
 LEFT JOIN comments ON errors.id = comments.errors_id
 ORDER BY ${distanceComputation} ASC;`);
-// FIXME: Better handle the search limit // Greg: I have updated the orderedGroups below, not sure this is relevant anymore
 
 const groups = Object.groupBy(result.rows, (row) => row.id as number);
 const orderedGroups = Object.values(groups).sort((a, b) => {
