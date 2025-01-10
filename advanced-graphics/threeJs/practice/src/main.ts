@@ -23,9 +23,13 @@ renderer.setSize(window.innerWidth, window.innerHeight); // Set canvas size
 renderer.setAnimationLoop(animate);
 document.body.appendChild(renderer.domElement); // Add renderer to the DOM
 
+// Texture loader
+const textureLoader = new THREE.TextureLoader();
+const texture = textureLoader.load('https://threejs.org/examples/textures/crate.gif'); // Example texture URL
+
 // Cube Geometry, Material, and Mesh
 const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshStandardMaterial({color: 0x00ff00}); // Green
+const material = new THREE.MeshStandardMaterial({map: texture}); // Green
 const cube = new THREE.Mesh(geometry, material);
 scene.add(cube); // Add cube to the scene
 
