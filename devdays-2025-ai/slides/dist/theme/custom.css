@@ -9,12 +9,12 @@
  *********************************************/
 :root {
   --r-background-color: #252334;
-  --r-main-font: FiraCode Nerd Font, Helvetica, sans-serif;
+  --r-main-font: Fira Code, Helvetica, sans-serif;
   --r-main-font-size: 42px;
   --r-main-color: #fff;
   --r-block-margin: 20px;
   --r-heading-margin: 0 0 20px 0;
-  --r-heading-font: FiraCode Nerd Font, Helvetica, sans-serif;
+  --r-heading-font: Fira Code, Helvetica, sans-serif;
   --r-heading-color: #F7DD71;
   --r-heading-line-height: 1.2;
   --r-heading-letter-spacing: normal;
@@ -358,12 +358,12 @@
  *********************************************/
 :root {
   --r-background-color: #252334;
-  --r-main-font: FiraCode Nerd Font, Helvetica, sans-serif;
+  --r-main-font: Fira Code, Helvetica, sans-serif;
   --r-main-font-size: 42px;
   --r-main-color: #fff;
   --r-block-margin: 20px;
   --r-heading-margin: 0 0 20px 0;
-  --r-heading-font: FiraCode Nerd Font, Helvetica, sans-serif;
+  --r-heading-font: Fira Code, Helvetica, sans-serif;
   --r-heading-color: #F7DD71;
   --r-heading-line-height: 1.2;
   --r-heading-letter-spacing: normal;
