@@ -1,16 +1,16 @@
 import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import GUI from "three/examples/jsm/libs/lil-gui.module.min.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
-import vertexShader from "./shaders/vertexShader.vert";
-import fragmentShader from "./shaders/fragmentShader.frag";
+import vertexShader from "./shaders/lavaVertex.vert";
+import fragmentShader from "./shaders/lavaFragment.frag";
 
 // Scene
 const scene = new THREE.Scene();
 
 // Axes
-const axesHelper = new THREE.AxesHelper( 5 );
-scene.add( axesHelper );
+const axesHelper = new THREE.AxesHelper(5);
+scene.add(axesHelper);
 
 // Camera
 const camera = new THREE.PerspectiveCamera(
@@ -27,28 +27,31 @@ renderer.setSize(window.innerWidth, window.innerHeight); // Set canvas size
 renderer.setAnimationLoop(animate);
 document.body.appendChild(renderer.domElement); // Add renderer to the DOM
 
-// Cube Geometry, Material, and Mesh
-const geometry = new THREE.BoxGeometry(1, 1, 1);
 // Shader material
+const textureLoader = new THREE.TextureLoader();
+
+const cloudTexture = textureLoader.load('/cloud.png');
+cloudTexture.wrapS = cloudTexture.wrapT = THREE.RepeatWrapping;
+
+const lavaTexture = textureLoader.load('/lavatile.jpg');
+lavaTexture.colorSpace = THREE.SRGBColorSpace;
+lavaTexture.wrapS = lavaTexture.wrapT = THREE.RepeatWrapping;
+
+const uniforms = {
+    'fogDensity': {value: 0.01},
+    'fogColor': {value: new THREE.Vector3(0, 0, 0)},
+    'time': {value: 1.0},
+    'uvScale': {value: new THREE.Vector2(2.0, 2.0)},
+    'texture1': {value: cloudTexture},
+    'texture2': {value: lavaTexture}
+};
 const material = new THREE.ShaderMaterial({
     vertexShader,
     fragmentShader,
-    uniforms: {
-        uTime: { value: 0.0 } // Uniform to pass time to the shader
-    },
+    uniforms,
 });
-const cube = new THREE.Mesh(geometry, material);
+const cube = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), material);
 scene.add(cube); // Add cube to the scene
-
-// Light
-const pointLight = new THREE.PointLight(0xffffff)
-pointLight.position.set(0,0.3,1)
-const lightHelper = new THREE.PointLightHelper(pointLight)
-scene.add(pointLight, lightHelper)
-
-const ambientLight = new THREE.AmbientLight(0xffffff)
-ambientLight.intensity = 0.5
-scene.add(ambientLight)
 
 // Add OrbitControls
 const controls = new OrbitControls(camera, renderer.domElement);
@@ -59,18 +62,22 @@ controls.target.set(cube.position.x, cube.position.y, cube.position.z); // Focus
 const stats = new Stats()
 document.body.appendChild(stats.dom)
 
+let parameters = {
+    speed: 1,
+}
 const gui = new GUI()
 gui.add(cube.rotation, 'x', 0, 10, 0.01)
 gui.add(cube.rotation, 'y', 0, 10, 0.01)
-gui.add(pointLight.position, 'x', -1, 1).name('Light Pos X')
+gui.add(parameters, 'speed', 0, 20, 1).name("lava speed")
 
 // Animation Loop
 const clock = new THREE.Clock();
+
 function animate() {
     controls.update(); // Required for damping
     renderer.render(scene, camera);
     stats.update()
-    material.uniforms.uTime.value = clock.getElapsedTime(); // Update time
+    uniforms['time'].value = clock.getElapsedTime() * parameters.speed;
 }
 
 // Handle Window Resize
