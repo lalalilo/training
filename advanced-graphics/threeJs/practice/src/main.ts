@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import GUI from "three/examples/jsm/libs/lil-gui.module.min.js";
 
 // Scene
 const scene = new THREE.Scene();
@@ -49,10 +50,13 @@ controls.enableDamping = true; // Smooth movement
 controls.dampingFactor = 0.05; // Damping factor
 controls.target.set(cube.position.x, cube.position.y, cube.position.z); // Focus on the cube
 
+const gui = new GUI()
+gui.add(cube.rotation, 'x', 0, 10, 0.01)
+gui.add(cube.rotation, 'y', 0, 10, 0.01)
+gui.add(pointLight.position, 'x', -20, 20).name('Light Pos X')
+
 // Animation Loop
 function animate() {
-    cube.rotation.x += 0.01;
-    cube.rotation.y += 0.01;
     controls.update(); // Required for damping
     renderer.render(scene, camera);
 }
