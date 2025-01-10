@@ -27,11 +27,20 @@ document.body.appendChild(renderer.domElement); // Add renderer to the DOM
 
 // Texture loader
 const textureLoader = new THREE.TextureLoader();
-const texture = textureLoader.load('https://threejs.org/examples/textures/crate.gif'); // Example texture URL
+// https://3dtextures.me/2024/11/28/metal-panel-010/
+const texture = textureLoader.load('/Metal_Panel_010_basecolor.png'); // Diffuse map
+texture.wrapS = THREE.RepeatWrapping;
+texture.wrapT = THREE.RepeatWrapping;
+texture.repeat.set(2, 2);
+const normalMap = textureLoader.load('/Metal_Panel_010_normal.png'); // Normal map
+normalMap.wrapS = THREE.RepeatWrapping;
+normalMap.wrapT = THREE.RepeatWrapping;
+normalMap.repeat.set(2, 2);
 
 // Cube Geometry, Material, and Mesh
 const geometry = new THREE.BoxGeometry(1, 1, 1);
-const material = new THREE.MeshStandardMaterial({map: texture}); // Green
+const material = new THREE.MeshStandardMaterial({map: texture, normalMap}); // Green
+material.normalScale.set(2, 2);
 const cube = new THREE.Mesh(geometry, material);
 scene.add(cube); // Add cube to the scene
 
@@ -57,7 +66,9 @@ document.body.appendChild(stats.dom)
 const gui = new GUI()
 gui.add(cube.rotation, 'x', 0, 10, 0.01)
 gui.add(cube.rotation, 'y', 0, 10, 0.01)
-gui.add(pointLight.position, 'x', -20, 20).name('Light Pos X')
+gui.add(pointLight.position, 'x', -1, 1).name('Light Pos X')
+gui.add(material.normalScale, 'x', 0, 10, 0.01).name('normalScale X')
+gui.add(material.normalScale, 'y', 0, 10, 0.01).name('normalScale Y')
 
 // Animation Loop
 function animate() {
