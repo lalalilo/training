@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import GUI from "three/examples/jsm/libs/lil-gui.module.min.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
+import vertexShader from "./shaders/vertexShader.vert";
+import fragmentShader from "./shaders/fragmentShader.frag";
 
 // Scene
 const scene = new THREE.Scene();
@@ -25,43 +27,12 @@ renderer.setSize(window.innerWidth, window.innerHeight); // Set canvas size
 renderer.setAnimationLoop(animate);
 document.body.appendChild(renderer.domElement); // Add renderer to the DOM
 
-// Custom shaders
-const vertexShader = `
-      varying vec3 vPosition;
-      uniform float uTime;
-
-      void main() {
-        // Add a wave effect based on time and vertex position
-        vec3 newPosition = position;
-        newPosition.z += sin(newPosition.x * 5.0 + uTime) * 0.2;
-        newPosition.y += sin(newPosition.z * 5.0 + uTime) * 0.2;
-
-        vPosition = newPosition; // Pass the modified position to the fragment shader
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
-      }
-    `;
-
-const fragmentShader = `
-      varying vec3 vPosition;
-      uniform float uTime;
-
-      void main() {
-        // Create a color effect based on position and time
-        vec3 color = vec3(
-          sin(vPosition.x * 3.0 + uTime) * 0.5 + 0.5,
-          sin(vPosition.y * 3.0 + uTime) * 0.5 + 0.5,
-          sin(vPosition.z * 3.0 + uTime) * 0.5 + 0.5
-        );
-        gl_FragColor = vec4(color, 1.0);
-      }
-    `;
-
 // Cube Geometry, Material, and Mesh
 const geometry = new THREE.BoxGeometry(1, 1, 1);
 // Shader material
 const material = new THREE.ShaderMaterial({
-    vertexShader: vertexShader,
-    fragmentShader: fragmentShader,
+    vertexShader,
+    fragmentShader,
     uniforms: {
         uTime: { value: 0.0 } // Uniform to pass time to the shader
     },
