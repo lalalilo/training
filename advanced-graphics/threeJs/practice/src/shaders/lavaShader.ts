@@ -16,7 +16,7 @@ export const getLavaShaderMaterial = (timeUniform: { value: number }) => {
         'fogDensity': {value: 0.01},
         'fogColor': {value: new THREE.Vector3(0, 0, 0)},
         'time': timeUniform,
-        'uvScale': {value: new THREE.Vector2(2.0, 2.0)},
+        'uvScale': {value: new THREE.Vector2(1, 1)},
         'texture1': {value: cloudTexture},
         'texture2': {value: lavaTexture}
     };
