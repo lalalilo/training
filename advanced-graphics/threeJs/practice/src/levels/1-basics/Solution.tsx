@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { useEffect, useRef } from "react";
+import { CANVAS_SIZE } from "../../App.tsx";
 
 export const Level1Solution = () => {
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -37,7 +38,7 @@ export const Level1Solution = () => {
   return (
     <div>
       <h2>Modèle:</h2>
-      <canvas ref={canvas} width={400} height={400} />
+      <canvas ref={canvas} width={CANVAS_SIZE} height={CANVAS_SIZE} />
     </div>
   );
 };

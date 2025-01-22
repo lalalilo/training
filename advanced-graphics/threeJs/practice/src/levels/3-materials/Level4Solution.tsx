@@ -1,11 +1,12 @@
 import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import GUI from "three/examples/jsm/libs/lil-gui.module.min.js";
-import Stats from "three/examples/jsm/libs/stats.module.js";
 import { useEffect, useRef } from "react";
-import styled from "styled-components";
+import { OrbitControls } from "three/examples/jsm/Addons.js";
+import { CANVAS_SIZE } from "../../App.tsx";
+import GUI from "three/examples/jsm/libs/lil-gui.module.min.js";
+import vertexShader from "../../assets/shaders/vertexShader.vert";
+import fragmentShader from "../../assets/shaders/fragmentShader.frag";
 
-export const Level2Solution = () => {
+export const Level4Solution = () => {
   const canvas = useRef<HTMLCanvasElement>(null);
   const helpers = useRef<HTMLDivElement>(null);
 
@@ -14,13 +15,15 @@ export const Level2Solution = () => {
 
     // Scene
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color("#e6f0fe");
 
     // Cube
     const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({
-      color: "#4870de",
-      wireframe: true,
+    const material = new THREE.ShaderMaterial({
+      vertexShader,
+      fragmentShader,
+      uniforms: {
+        uTime: { value: 0.0 }, // Uniform to pass time to the shader
+      },
     });
     const cube = new THREE.Mesh(geometry, material);
     scene.add(cube);
@@ -32,7 +35,7 @@ export const Level2Solution = () => {
       0.1, // Near clipping plane
       1000, // Far clipping plane
     );
-    camera.position.set(2, 2, 2); // Move camera away from the cube
+    camera.position.z = 2; // Move camera away from the cube
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({
@@ -46,37 +49,24 @@ export const Level2Solution = () => {
     controls.dampingFactor = 0.05; // Damping factor
     controls.target.set(cube.position.x, cube.position.y, cube.position.z); // Focus on the cube
 
-    // Stats
-    const stats = new Stats();
-    stats.dom.style.position = "unset";
-    helpers.current.appendChild(stats.dom);
-
     // Axes
     const axesHelper = new THREE.AxesHelper(5);
     scene.add(axesHelper);
 
-    // Grid
-    const gridHelper = new THREE.GridHelper(10, 10);
-    gridHelper.visible = false;
-    scene.add(gridHelper);
-
-    // Add basic GUI
+    // GUI
     const gui = new GUI({ autoPlace: false });
     helpers.current.appendChild(gui.domElement);
-    let parameters = {
-      rotationSpeed: 1,
+    const parameters = {
+      speed: 1,
     };
-    gui.add(parameters, "rotationSpeed", 0, 10, 1);
-    gui.add(axesHelper, "visible");
-    gui.add(gridHelper, "visible");
+    gui.add(parameters, "speed", 0, 10, 1);
+    gui.close();
 
     // Animation Loop
+    const clock = new THREE.Clock();
     function animate() {
-      cube.rotation.x += 0.01 * parameters.rotationSpeed;
-      cube.rotation.y += 0.01 * parameters.rotationSpeed;
-
       controls.update(); // Required for damping
-      stats.update();
+      material.uniforms.uTime.value = clock.getElapsedTime() * parameters.speed; // Update time
 
       renderer.render(scene, camera);
       requestAnimationFrame(animate);
@@ -91,16 +81,10 @@ export const Level2Solution = () => {
   }, []);
 
   return (
-    <Wrapper>
+    <div>
       <h2>Modèle:</h2>
       <div ref={helpers} />
-      <canvas ref={canvas} width={400} height={400} />
-    </Wrapper>
+      <canvas ref={canvas} width={CANVAS_SIZE} height={CANVAS_SIZE} />
+    </div>
   );
 };
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
