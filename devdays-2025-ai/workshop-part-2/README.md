@@ -43,7 +43,7 @@ Choosing the path of your local.db file for "Database path"
 
 ## Tasks
 
-The goal of this workshop is to have have you hands-on experience with an AI project. Feel free to do whatever you want with the project, but here are some suggestions:
+The goal of this workshop is to have you hands-on experience with an AI project. Feel free to do whatever you want with the project, but here are some suggestions:
 
 ### Understand the starting point
 
@@ -51,6 +51,7 @@ Read through the code and/or ask Copilot questions about the project with the `#
 Go through `./src/openai.ts` and `./src/index.ts` to understand the AI models used and the workflow. Try to modify the prompt that generates the message to see how it affects the output.
 
 Technology choices:
+
 - **Database**: `libSQL`, a rewrite of SQLite that includes vectors support. It allows to store a database in a file and commit it (`local.db`).
 - **AI**: [`openai`](https://github.com/openai/openai-node) since this starting point uses only openAI models.
 
