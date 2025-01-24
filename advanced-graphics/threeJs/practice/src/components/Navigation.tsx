@@ -1,5 +1,5 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import styled from 'styled-components'
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
 const NavigationContainer = styled.div`
   position: fixed;
@@ -9,14 +9,14 @@ const NavigationContainer = styled.div`
   display: flex;
   gap: 2rem;
   z-index: 1;
-`
+`;
 
 const Arrow = styled.button<{ disabled: boolean }>`
   background: none;
   border: none;
   font-size: 3rem;
-  color: ${({ disabled }) => (disabled ? '#999' : '#333')};
-  cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
+  color: ${({ disabled }) => (disabled ? "#999" : "#333")};
+  cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
   padding: 1rem;
   display: flex;
   align-items: center;
@@ -30,24 +30,24 @@ const Arrow = styled.button<{ disabled: boolean }>`
   &:disabled {
     opacity: 0.5;
   }
-`
+`;
 
-const LEVEL_ORDER = ['0', '1', '2', '3', '4', '5', '6', '7', '8', 'bonus']
+const LEVEL_ORDER = ["1", "2", "3", "4", "5", "6"];
 
 export const Navigation = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const currentPath = location.pathname.split('/').pop() || '0'
-  const currentIndex = LEVEL_ORDER.indexOf(currentPath)
+  const navigate = useNavigate();
+  const location = useLocation();
+  const currentPath = location.pathname.split("/").pop() || "0";
+  const currentIndex = LEVEL_ORDER.indexOf(currentPath);
 
   const goToLevel = (index: number) => {
-    const level = LEVEL_ORDER[index]
-    navigate(`/level/${level}`)
-  }
+    const level = LEVEL_ORDER[index];
+    navigate(`/level/${level}`);
+  };
 
-  const isDevPath = location.pathname === '/dev'
+  const isDevPath = location.pathname === "/dev";
 
-  if (isDevPath) return null
+  if (isDevPath) return null;
 
   return (
     <NavigationContainer>
@@ -64,8 +64,8 @@ export const Navigation = () => {
         →
       </Arrow>
     </NavigationContainer>
-  )
-}
+  );
+};
 
 export const LevelNav = styled.nav`
   position: fixed;
@@ -78,7 +78,7 @@ export const LevelNav = styled.nav`
   max-width: 400px;
   justify-content: flex-end;
   padding: 1rem;
-`
+`;
 
 export const NavLink = styled(Link)`
   color: #333;
@@ -86,9 +86,9 @@ export const NavLink = styled(Link)`
   padding: 0.5rem 1rem;
   border: 1px solid #333;
   border-radius: 4px;
-  
+
   &:hover {
     background-color: #333;
     color: #f5f5f5;
   }
-`
+`;
