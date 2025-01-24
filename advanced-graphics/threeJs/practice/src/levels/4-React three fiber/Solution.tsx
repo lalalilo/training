@@ -6,6 +6,7 @@ import GUI from "three/examples/jsm/libs/lil-gui.module.min.js";
 import textureUrl from "../../assets/textures/Metal_Panel_010_basecolor.png";
 import normalMapUrl from "../../assets/textures/Metal_Panel_010_normal.png";
 import { CANVAS_SIZE } from "../../App.tsx";
+import { useDatGUI } from "../../hooks/useDatGUI.ts";
 
 export const Level5Solution = () => {
   const helpers = useRef<HTMLDivElement>(null);
@@ -87,23 +88,4 @@ const Lights = ({ gui }: { gui: React.MutableRefObject<GUI | undefined> }) => {
       <pointLight args={[0xffffff]} position={[0, 0.3, 1]} ref={lightRef} />
     </>
   );
-};
-
-const useDatGUI = (parent: React.MutableRefObject<HTMLDivElement | null>) => {
-  const gui = useRef<GUI>();
-
-  useEffect(() => {
-    if (!parent.current) return;
-
-    gui.current = new GUI({ autoPlace: false });
-    parent.current.appendChild(gui.current.domElement);
-
-    return () => {
-      if (gui.current) {
-        gui.current.destroy();
-      }
-    };
-  }, []);
-
-  return gui;
 };

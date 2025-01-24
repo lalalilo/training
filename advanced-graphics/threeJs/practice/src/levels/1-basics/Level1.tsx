@@ -9,7 +9,7 @@ export const Level1 = () => {
   useEffect(() => {
     // https://threejs.org/docs/
     // https://threejs.org/manual/
-    // keywords: scene, mesh, carmera, renderer
+    // keywords: scene, mesh, camera, renderer
     // code here
   }, []);
 
