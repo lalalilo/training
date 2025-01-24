@@ -35,7 +35,7 @@ export const Level4Solution = () => {
       0.1, // Near clipping plane
       1000, // Far clipping plane
     );
-    camera.position.z = 2; // Move camera away from the cube
+    camera.position.set(1, 1, 1); // Move camera away from the cube
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({

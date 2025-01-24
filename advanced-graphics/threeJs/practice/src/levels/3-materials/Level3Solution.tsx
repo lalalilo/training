@@ -48,7 +48,7 @@ export const Level3Solution = () => {
       0.1, // Near clipping plane
       1000, // Far clipping plane
     );
-    camera.position.z = 1.5; // Move camera away from the cube
+    camera.position.set(1, 1, 1); // Move camera away from the cube
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({
@@ -58,14 +58,13 @@ export const Level3Solution = () => {
 
     // Add OrbitControls
     const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true; // Smooth movement
-    controls.dampingFactor = 0.05; // Damping factor
     controls.target.set(cube.position.x, cube.position.y, cube.position.z); // Focus on the cube
 
     // Axes
     const axesHelper = new THREE.AxesHelper(5);
     scene.add(axesHelper);
 
+    // GUI
     const gui = new GUI({ autoPlace: false });
     helpers.current.appendChild(gui.domElement);
     gui.add(cube.rotation, "x", 0, 10, 0.1);
@@ -78,8 +77,6 @@ export const Level3Solution = () => {
 
     // Animation Loop
     function animate() {
-      controls.update(); // Required for damping
-
       renderer.render(scene, camera);
       requestAnimationFrame(animate);
     }

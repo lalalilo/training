@@ -9,8 +9,21 @@ export const Level1 = () => {
   useEffect(() => {
     // https://threejs.org/docs/
     // https://threejs.org/manual/
-    // keywords: scene, mesh, camera, renderer
-    // code here
+    if (!canvas.current) return;
+    /*
+        CODE HERE!
+    */
+
+    // Scene
+
+    // Cube
+    // BoxGeometry, MeshBasicMaterial, Mesh
+
+    // Camera
+    // PerspectiveCamera
+
+    // Renderer
+    // WebGLRenderer
   }, []);
 
   return (

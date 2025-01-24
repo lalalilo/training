@@ -11,6 +11,7 @@ export const useDatGUI = (
 
     gui.current = new GUI({ autoPlace: false });
     parent.current.appendChild(gui.current.domElement);
+    gui.current.close();
 
     return () => {
       if (gui.current) {

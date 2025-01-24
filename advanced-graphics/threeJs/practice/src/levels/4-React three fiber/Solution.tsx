@@ -17,7 +17,7 @@ export const Level5Solution = () => {
       <h2>Modèle:</h2>
       <div ref={helpers} />
       <Canvas
-        camera={{ position: [0, 0, 1.5], fov: 75 }}
+        camera={{ position: [1, 1, 1], fov: 75 }}
         style={{
           background: "#000000",
           width: CANVAS_SIZE,
@@ -54,7 +54,6 @@ const Cube = ({ gui }: { gui: MutableRefObject<GUI | undefined> }) => {
     cubeFolder
       .add(materialRef.current.normalScale, "y", 0, 10, 0.1)
       .name("normalScale Y");
-    gui.current.close();
   }, []);
 
   return (

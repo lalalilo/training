@@ -1,11 +1,12 @@
-import { Canvas, Euler, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
-import { OrbitControls, useHelper, useTexture } from "@react-three/drei";
+import { OrbitControls, useHelper } from "@react-three/drei";
 import * as THREE from "three";
 import GUI from "three/examples/jsm/libs/lil-gui.module.min.js";
-import checkerTexture from "../../assets/textures/checker.png";
 import { CANVAS_SIZE } from "../../App.tsx";
 import { useDatGUI } from "../../hooks/useDatGUI.ts";
+import { Floor } from "./components/Floor.tsx";
+import { Walls } from "./components/Walls.tsx";
 
 export const Level6Solution = () => {
   const helpers = useRef<HTMLDivElement>(null);
@@ -36,57 +37,9 @@ export const Level6Solution = () => {
   );
 };
 
-const wallSize = 30;
-const Walls = () => {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const materialRef = useRef<THREE.MeshPhongMaterial>(null);
-
-  return (
-    <mesh
-      ref={meshRef}
-      position={[0, wallSize / 4 - 0.1, 0]}
-      receiveShadow={true}
-    >
-      <boxGeometry args={[wallSize, wallSize / 2, wallSize]} />
-      <meshPhongMaterial
-        ref={materialRef}
-        color={"#cccccc"}
-        side={THREE.BackSide}
-      />
-    </mesh>
-  );
-};
-
-const minus90Deg = Math.PI * -0.5;
-const rotation: Euler = [minus90Deg, 0, 0];
-const Floor = () => {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const materialRef = useRef<THREE.MeshPhongMaterial>(null);
-
-  const texture = useTexture(checkerTexture, (texture) => {
-    texture.colorSpace = THREE.LinearSRGBColorSpace;
-  });
-  texture.wrapS = THREE.RepeatWrapping;
-  texture.wrapT = THREE.RepeatWrapping;
-  texture.magFilter = THREE.NearestFilter;
-  texture.repeat.set(wallSize / 2, wallSize / 2);
-
-  useEffect(() => {
-    if (!meshRef.current || !materialRef.current) return;
-  }, []);
-
-  return (
-    <mesh ref={meshRef} receiveShadow={true} rotation={rotation}>
-      <planeGeometry args={[wallSize, wallSize]} />
-      <meshPhongMaterial map={texture} ref={materialRef} />
-    </mesh>
-  );
-};
-
 const cubeSize = 4;
 const Cube = () => {
   const meshRef = useRef<THREE.Mesh>(null);
-  const materialRef = useRef<THREE.MeshPhongMaterial>(null);
 
   return (
     <mesh
@@ -96,7 +49,7 @@ const Cube = () => {
       receiveShadow={true}
     >
       <boxGeometry args={[cubeSize, cubeSize, cubeSize]} />
-      <meshPhongMaterial ref={materialRef} color={"#8AC"} />
+      <meshPhongMaterial color={"#8AC"} />
     </mesh>
   );
 };
@@ -104,12 +57,11 @@ const Cube = () => {
 const radius = 3;
 const Polyhedron = () => {
   const meshRef = useRef<THREE.Mesh>(null);
-  const materialRef = useRef<THREE.MeshPhongMaterial>(null);
 
   useFrame((_, delta) => {
     if (!meshRef.current) return;
-    meshRef.current.rotation.x += 1 * delta;
-    meshRef.current.rotation.y += 1 * delta;
+    meshRef.current.rotation.x += delta;
+    meshRef.current.rotation.y += delta;
   });
 
   return (
@@ -120,7 +72,7 @@ const Polyhedron = () => {
       receiveShadow={true}
     >
       <icosahedronGeometry args={[radius, 0]} />
-      <meshPhongMaterial ref={materialRef} color={"#CA8"} />
+      <meshPhongMaterial color={"#CA8"} />
     </mesh>
   );
 };
@@ -136,7 +88,6 @@ const Lights = ({ gui }: { gui: React.MutableRefObject<GUI | undefined> }) => {
     lightFolder.add(lightRef.current.position, "y", 1, 20, 1);
     lightFolder.add(lightRef.current.position, "z", -10, 10, 1);
     lightFolder.add(lightRef.current, "intensity", 0, 200, 1);
-    lightFolder.open();
   }, []);
 
   return (

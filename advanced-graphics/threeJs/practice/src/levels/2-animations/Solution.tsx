@@ -42,8 +42,6 @@ export const Level2Solution = () => {
 
     // Add OrbitControls
     const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true; // Smooth movement
-    controls.dampingFactor = 0.05; // Damping factor
     controls.target.set(cube.position.x, cube.position.y, cube.position.z); // Focus on the cube
 
     // Stats
@@ -76,7 +74,6 @@ export const Level2Solution = () => {
       cube.rotation.x += 0.01 * parameters.rotationSpeed;
       cube.rotation.y += 0.01 * parameters.rotationSpeed;
 
-      controls.update(); // Required for damping
       stats.update();
 
       renderer.render(scene, camera);
