@@ -76,10 +76,14 @@ It's probably not necessary with the current setup, but it's a good exercise to 
 
 If you want to use another usecase, feel free to do so. You can use the config and the boilerplate as a starting point.
 
-## TODO
+Projects example:
 
-- [x] Explain the default setup and customization options
-- [x] Explain the default workflow and how to customize it
-  - Llama Index
-  - Vercel AI SDK
-- [ ] Add more examples in db
+- Automatiquement générer du contenu d’un template memory
+- Smart assets search in the DAM
+- Generate a class avatar using prompt
+- Automatically create illustrations using Lalilo graphics charts
+- NPS extractor (”give me all NPS speaking about the free model”)
+- Generate parent reports in language spoken at home (or generate a new language for the lalilo ahpplication)
+- Glossary in books (give a word definition in books)
+- Improve lalibottine
+- Create a bot to warn about next dev training

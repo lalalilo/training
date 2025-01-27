@@ -48,6 +48,7 @@
         <h2> Lalilo - Devdays 2025</h2>
 
         <aside class="notes" data-markdown>
+          # Greg
           Faux titre du training.
 
           Grosse hype AI depuis quelques années, tout le monde veut en faire, des entreprises veulent remplacer des
@@ -73,7 +74,16 @@
           <li class="fragment fade-left">Understand how developers can use them in products they build</li>
           <li class="fragment fade-left">Get some hands-on experience</li>
         </ul>
+      <aside class="notes" data-markdown>
+        # Greg
+        ## Understand how AI models work
+          - Sans détails technique, ce qui est nécessaire pour un dev
+          - Vulgariser les termes qu'on voit partout
+        ## Know Renaissance's stance on the topic
+        ## Understand how developers can use them in products they build
+      </aside>
       </section>
+
 
       <section class="flex flex-col">
         <h2>What exactly is a
@@ -95,11 +105,13 @@
         </h2>
 
         <aside class="notes" data-markdown>
+          # Fabien
+
           **Model** = modèle probabiliste, basé sur des réseaux de neurones : modèle = simuler une fonction
 
           **Language** = langage => fr, en, JS, ...
 
-          **Large** = beaucoup de paramètres dans le réseau de neurones
+          **Large** = beaucoup de paramètres dans le réseau de neurones => + large = peut modéliser des fonctions plus complexes
 
           LLM = Modèle probabiliste d'une Language
 
@@ -126,13 +138,15 @@
         </div>
 
         <aside class="notes" data-markdown>
+          # Fabien
+
           LLM = **Réseau de neurones** => il faut l'entrainer pour lui faire apprendre la fonctionnalité "**pour une
           suite
           de mots, prédire le prochain le plus probable**"
 
           Plein de données => tu input un début de phrase, tu évalues la proba des mots qui suivent
 
-          Demande plein de données, plein de temps, c'est cher, c'est compliqué, c'est cher en temps de calcul.
+          Demande plein de données, plein de temps, c'est cher, c'est compliqué, c'est cher en temps de calcul et donc coûts énergétique
 
           Un modèle entrainé = l'ensemble des pondérations des noeuds du réseau => poids du modèle = nombre de noeuds.
 
@@ -170,9 +184,18 @@
               <li class="text-green">Cheaper</li>
               <li class="text-green">Doesn't depend on internet access</li>
               <li class="text-red">Requires a powerful machine or a very light model</li>
-              <li class="text-red">Not a lot of models support this</li>
+              <li class="text-red">Not a lot of companies support this</li>
             </ul>
           </div>
+
+          <aside class="notes" data-markdown>
+            # Greg
+            Via une API parce que c'est aussi monétisé / pas open source 
+
+
+            Model local de 3GB à 260GB.
+            Pas n'importe quel modèle sur n'importe quelle machine. 
+          </aside>
       </section>
 
       <section>
@@ -194,6 +217,8 @@
           documentation for our AzureAI setup</a>
 
         <aside class="notes" data-markdown>
+          # Fabien
+
           Il y a aussi des modèles de speech, de computer vision, de modération.
 
           Pourquoi ne pas utiliser directement les API OpenAI?
@@ -293,13 +318,29 @@
         <span class="text-xs">* Cost per 1M tokens</span>
 
         <aside class="notes" data-markdown>
+          # Greg
+          Pricing par million de token; un token approximation à un mots
+          Pourquoi input/output ? Processe la question, processe réponse
+
+
           - **OpenAI** = market leader, a lancé la nouvelle vague de LLMs avec ChatGPT
-          - Petit modèle = embarquable dans une appli, moins performant mais plus rapide, beaucoup moins cher
+          - Petit modèle = embarquable dans une appli via API, moins performant mais plus rapide, beaucoup moins cher
+            - Copilot inline cherche instantanéité
           - Moyen modèle = bon compromis performance / coût pour une appli LLM centric (chatGPT, Claude)
+            - Plus long, copilot chat (application centré sur l'IA - utilisateur prêt à attendre quelques secondes)
           - Gros modèle = arms-race recherche, très lent, pas forcément user centric (cf o3)
+            - 1 minute de temps de réponse; plus orienté recherche 
           - **Anthropic** = Le challenger, très reconnu notament pour Sonnet 3.5 v2 très performant, mais aussi Haiku
           (petit) et Opus (gros)
           - **Meta** vise plutot l'open source et sont les premiers dans le domaine
+          - **Mistral** entreprise française (modèle fine-tunés FR)
+            - Certain modèles qui sont open-source
+
+
+          Moyen de comparer des modèles c'est aussi comparer les prix des tokens
+          Pricing et performance pas forcément linéaire.
+          o4-mini plus de dix fois moins cher, mais pas dix fois moins performant sur une tâche simple
+
         </aside>
       </section>
 
@@ -309,16 +350,32 @@
         <code>
           cd ../workshop-part-1
         </code>
+         <aside class="notes" data-markdown>
+          # Fabien
+          Instruction dans le README
+
+          Manipulation de prompt / itération de prompt
+          ---
+
+          Qu'est-ce que vous en retenez ? 
+          "Facile d'avoir un résultat (un résultat presque bon (80%)) mais difficile d'avoir un tool production ready"
+         </aside>
       </section>
 
       <section>
-        <h2>What does it change for us?</h2>
+        <h2>What does it mean for us?</h2>
 
         <aside class="notes" data-markdown>
+          # Greg
+
           As mentioned earlier, LLMs development/optimization is more of a data science task than a software
           engineering one.
 
           However, we are the ones who will use them in our products: how to integrate LLMs in our products?
+
+          ---
+          Facile d'avoir 80% difficile d'avoir production ready
+
         </aside>
       </section>
 
@@ -327,27 +384,59 @@
           <h3>Github Copilot, a well-known LLM-based product</h3>
 
           <p>It can do a few things base models can't do:</p>
+          <aside class="notes" data-markdown>
+          # Greg
+
+          Exemple de produit basé sur un LLM
+          Mais qui n'est pas une application strict et direct, ce n'est pas juste un appel API
+
+
+        </aside>
         </section>
 
         <section>
           <image src="./assets/copilot-1.png" class="w-full !mx-auto rounded" />
 
           <p>Taking the edition context into account, including open tabs.</p>
+          <aside class="notes" data-markdown>
+          # Greg
+
+          Capable de prendre un context into account, les autres tabs ouvertes, le language
+
+        </aside>
         </section>
 
         <section>
           <image src="./assets/copilot-2.png" class="w-full !mx-auto rounded" />
-
           <p>Processing the codebase and answering related questions</p>
+          <aside class="notes" data-markdown>
+          # Greg
+
+          Capable de naviguer dans le code 
+          Capable d'indentifier les zones pertinantes
+          Mais pourtant vous imaginez bien qu'il a pas toute la codebase en context 
+        </aside>
         </section>
 
         <section>
           <image src="./assets/copilot-3.png" class="w-full !mx-auto rounded" />
 
           <p>Generating code edits in a purpose built view</p>
+          <aside class="notes" data-markdown>
+          # Greg
+
+          Capable de modifier l'état des fichiers ouverts
+          Modification de line (ajout/suppression) -> bien au dela d'un simple LLM
+        </aside>
         </section>
 
-        <section><strong>How does this work?</strong></section>
+        <section><strong>How does this work?</strong>
+        <aside class="notes" data-markdown>
+          # Greg
+
+          On peut se demander en tant que dev, comment on peut construire un produit comme copilot ? Avec ces différentes features
+        </aside>
+        </section>
       </section>
 
       <section>
@@ -378,6 +467,13 @@
           <div class="w-1/2">
             <p class="text-red"><strong>Weaknesses</strong></p>
             <ul>
+              <li class="text-red">Energy consumption
+                <br />
+                <span class="fragment" data-fragment-index="1">
+                  => <strong>Use it sparingly</strong>
+                </span>
+              </li>
+
               <li class="text-red">Non-deterministic outputs
                 <br />
                 <span class="fragment" data-fragment-index="1">
@@ -398,6 +494,8 @@
         </div>
 
         <aside class="notes" data-markdown>
+          # Fabien
+
           - **New kind of UIs**: More fuzzy interactions than traditional ones, or even custom UIs tailormade for a user
           - **Data processing**: Way easier to extract information from a text, a sound, an image
           - **Evaluations**: How to measure quality in a non-deterministic context? Pretty much like tests
@@ -410,6 +508,7 @@
       <section>
         <section>
           <h3>Are we actually ok with these risks?</h3>
+
         </section>
 
         <section>
@@ -417,12 +516,27 @@
           <br />
           <p class="fragment fade-up">But we should do it <br /><strong>responsibly</strong><br />to avoid putting the
             company at risk.</p>
+          
+          <aside class="notes" data-markdown>
+            # Greg
+
+            - RL très encourgeant à utiliser l'IA - enjeux stratégique (marché, investisseurs, concurrence et notamment de nouveaux arrivants)
+            - RL pourrait risquer sa réputation et son business existant 
+            - Donc il faut faire attention avec ce que l'on fait
+          </aside>
         </section>
 
         <section>
           <p>As a result,<br /><strong>we should always have a human in the loop</strong>,
-            <br />particularly when dealing with students.
+            <br />particularly when interacting with students.
           </p>
+
+          <aside class="notes" data-markdown>
+            # Greg
+
+            - Confiant dans la privacy - AzureAI donné des élèves sont pas à risque
+            - Moins confiant sur l'output d'un modèle 
+          </aside>
         </section>
 
         <section class="*:text-left">
@@ -448,6 +562,9 @@
         <h3>So, how do we get ready?</h3>
 
         <p class="fragment fade-up">By knowing about the following tools...</p>
+          <aside class="notes" data-markdown>
+            # Fabien
+          </aside>
       </section>
 
       <section>
@@ -458,6 +575,17 @@
             Improving prompting skills makes it possible to use models to their full
             potential.
           </p>
+          <aside class="notes" data-markdown>
+            # Fabien
+              
+            Technique basée sur l’expérience qui permet de créer des inputs qui augementent les chances d’avoir une
+            réponse satisfaisante ⇒ c’est aux LLMs ce que le code est aux ordinateurs, le langage de programmation des
+            LLM.
+  
+            Un bon prompting = utiliser le modèle au maximum de ses capacités
+  
+            On peut prompter un modèle pour nous aider à créer des prompts quali!
+          </aside>
         </section>
 
         <section>
@@ -472,17 +600,18 @@
               </a>
             </li>
           </ul>
+          <aside class="notes" data-markdown>
+            # Fabien
+              
+            Technique basée sur l’expérience qui permet de créer des inputs qui augementent les chances d’avoir une
+            réponse satisfaisante ⇒ c’est aux LLMs ce que le code est aux ordinateurs, le langage de programmation des
+            LLM.
+  
+            Un bon prompting = utiliser le modèle au maximum de ses capacités
+  
+            On peut prompter un modèle pour nous aider à créer des prompts quali!
+          </aside>
         </section>
-
-        <aside class="notes" data-markdown>
-          Technique basée sur l’expérience qui permet de créer des inputs qui augementent les chances d’avoir une
-          réponse satisfaisante ⇒ c’est aux LLMs ce que le code est aux ordinateurs, le langage de programmation des
-          LLM.
-
-          Un bon prompting = utiliser le modèle au maximum de ses capacités
-
-          On peut prompter un modèle pour nous aider à créer des prompts quali!
-        </aside>
       </section>
 
       <section>
@@ -492,6 +621,12 @@
           <p>
             Make the LLM output data in a code-compatible format, like JSON.
           </p>
+
+          <aside class="notes" data-markdown>
+            # Greg
+            La plupart des libs d'utilitaires LLMs permettent de formater les outputs en JSON
+            Les API OpenAI le permettent nativement.
+          </aside> 
         </section>
 
         <section>
@@ -505,12 +640,14 @@
                 output doc</a>, it uses <a href="https://zod.dev/">Zod</a>
             </li>
           </ul>
-        </section>
+          <aside class="notes" data-markdown>
+            # Greg
+            La plupart des libs d'utilitaires LLMs permettent de formater les outputs en JSON
+            Les API OpenAI le permettent nativement.
 
-        <aside class="notes" data-markdown>
-          La plupart des libs d'utilitaires LLMs permettent de formater les outputs en JSON
-          Les API OpenAI le permettent nativement.
-        </aside>
+            Intérêt c'est intéragir avec les résultats via des process automatiques - garanti du format de donnée
+          </aside> 
+        </section>
       </section>
 
 
@@ -521,21 +658,27 @@
           <p>
             Prevent the model from generating unwanted outputs.
           </p>
+          
+          <aside class="notes" data-markdown>
+            # Fabien
+
+            Guards = controler les inputs et les outputs d'un modèle et y appliquer des règles:
+            - Pour préserver la privacy de certaines données
+            - Pour éviter des outputs inappropriés
+  
+            Certaines guardes peuvent être basées sur du code normal (les structures output sont une forme de guard par
+            exemple), d'autres sur d'autres LLM (vérifier que la réponse générée est écrite en bon français par exemple)
+          </aside>
         </section>
 
         <section>
           <image src="./assets/guardrails.png" class="w-full !mx-auto rounded" />
           <a href="https://www.guardrailsai.com/">Guardrails AI</a>
+          
+          <aside class="notes" data-markdown>
+            # Fabien
+          </aside>
         </section>
-
-        <aside class="notes" data-markdown>
-          Guards = controler les inputs et les outputs d'un modèle et y appliquer des règles:
-          - Pour préserver la privacy de certaines données
-          - Pour éviter des outputs inappropriés
-
-          Certaines guardes peuvent être basées sur du code normal (les structures output sont une forme de guard par
-          exemple), d'autres sur d'autres LLM (vérifier que la réponse générée est écrite en bon français par exemple)
-        </aside>
       </section>
 
       <section>
@@ -545,6 +688,19 @@
           <p>
             Define success metrics for a task and evaluate the model against them on a dataset.
           </p>
+          <aside class="notes" data-markdown>
+            # Greg
+            
+            - Quantifier la qualité d’un prompt
+            - Valider qu’un changement de modèle ou de prompt n’impacte pas négativement la qualité du produit
+            - Comme les tests automatisés en dev: prompt = code, model = version de node
+            - Tests non déterministes donc on doit calculé un score aggrégé sur plusieurs runs
+            - Certaines métriques définies par du code, d'autres par d'autres LLMs
+
+            Exemple: workshop 1 
+            On a un dataset sur lequel on connait les réponses attendues
+            Capable de changer de prompt ou de model et d'évaluer la meilleure combinaison
+        </aside>
         </section>
 
         <section>
@@ -558,14 +714,6 @@
             </li>
           </ul>
         </section>
-
-        <aside class="notes">
-          - Quantifier la qualité d’un prompt
-          - Valider qu’un changement de modèle ou de prompt n’impacte pas négativement la qualité du produit
-          - Comme les tests automatisés en dev: prompt = code, model = version de node
-          - Tests non déterministes donc on doit calculé un score aggrégé sur plusieurs runs
-          - Certaines métriques définies par du code, d'autres par d'autres LLMs
-        </aside>
       </section>
 
       <section>
@@ -576,6 +724,24 @@
             Using <strong>embeddings</strong> to index data and retrieve it efficiently to provide context to a
             model.
           </p>
+          
+          <aside class="notes" data-markdown>
+            # Fabien
+            
+            Ex: Copilot qui sait dans quel fichier regarder pour répondre à une question
+  
+            Taille du contexte ⇒ tu peux pas envoyer toute la base de code à chaque question (+ ça couterait très cher)
+  
+            - Creation du projet ⇒ embed tous les fichiers du projets (comment bien découper les fichiers?)
+            - Au moment de poser une question
+            - embed la question
+            - identifier les fichiers pertinents (sémantiquement plus proches)
+            - Lire ces fichier seulement et le intégrer dans le contexte du LLM
+            - Faire générer une réponse au LLM
+  
+            On calcule un embedding avec un modèle spécialisé: modèle qui prend du texte et sort des vecteurs. 2 textes
+            proches retournent retournent des vecteurs proches (Bcp plus léger que les modèles LLM)
+          </aside>
         </section>
 
         <section>
@@ -583,6 +749,13 @@
             <strong>Embedding</strong> = a vector representation of a text that can be compared to other embeddings to
             find similar texts
           </p>
+
+          <aside class="notes" data-markdown>
+            # Fabien
+            
+            Cf copilot avec #codespace => La codebase est indéxée avec des embeddings
+            Copilot fait des queries sur ces embeddings pour trouver le code pertinent
+          </aside>
         </section>
 
         <section>
@@ -590,6 +763,10 @@
             A <strong>vector database</strong> can be used to store embeddings of the context we want to access along
             with utility tools to retrieve them.
           </p>
+          
+          <aside class="notes" data-markdown>
+            # Fabien
+          </aside>
         </section>
 
         <section>
@@ -610,30 +787,21 @@
           </ul>
         </section>
 
-        <aside class="notes" data-markdown>
-          Ex: Copilot qui sait dans quel fichier regarder pour répondre à une question
-
-          Taille du contexte ⇒ tu peux pas envoyer toute la base de code à chaque question (+ ça couterait très cher)
-
-          - Creation du projet ⇒ embed tous les fichiers du projets (comment bien découper les fichiers?)
-          - Au moment de poser une question
-          - embed la question
-          - identifier les fichiers pertinents (sémantiquement plus proches)
-          - Lire ces fichier seulement et le intégrer dans le contexte du LLM
-          - Faire générer une réponse au LLM
-
-          On calcule un embedding avec un modèle spécialisé: modèle qui prend du texte et sort des vecteurs. 2 textes
-          proches retournent retournent des vecteurs proches (Bcp plus léger que les modèles LLM)
-        </aside>
+        
       </section>
 
       <section>
-        <h4>Tools and agents</h4>
+        <h4>Agents and Tools</h4>
 
         <section>
           <p>
             <strong>Agent</strong> = Making an LLM autonomous to perform a specific task
           </p>
+
+          <aside class="notes" data-markdown>
+            # Greg
+            Rendre un LLM un autonome
+          </aside>
         </section>
 
         <section>
@@ -650,6 +818,10 @@
             <li class="fade-left fragment">Access to domain code that could help the LLM (ex: computing a success rate)
             </li>
           </ul>
+          <aside class="notes" data-markdown>
+            # Greg
+            Récupérer des informations d'une base d'information 
+          </aside>
         </section>
 
         <section>
