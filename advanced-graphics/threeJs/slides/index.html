@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>reveal.js</title>
+
+    <link rel="stylesheet" href="dist/reset.css">
+    <link rel="stylesheet" href="dist/reveal.css">
+    <link rel="stylesheet" href="dist/theme/dracula.css"/>
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="plugin/highlight/monokai.css">
+    <script src="plugin/highlight/highlight.js"></script>
+    <script>
+        Reveal.initialize({
+            plugins: [RevealHighlight],
+        });
+    </script>
+</head>
+
+<body>
+<div class="reveal">
+    <div class="slides">
+        <section>
+            <h1>Three.js</h1>
+            <h2>Introduction</h2>
+        </section>
+
+        <section data-auto-animate>
+            <h1>WebGL</h1>
+            <p>Web Graphics Library</p>
+        </section>
+
+        <section data-auto-animate>
+            <h1>WebGL</h1>
+            <ul>
+                <li><p>Low level JavaScript API for 2D and 3D graphics</p></li>
+                <li><p>Executed on GPU</p></li>
+                <li><p>based on OpenGL ES</p></li>
+            </ul>
+        </section>
+
+        <section data-auto-animate>
+            <h1>Three.js</h1>
+            <img data-src="images/three.svg" width="200px"/>
+        </section>
+
+        <section data-auto-animate>
+            <h1>Three.js</h1>
+            <ul>
+                <li><p>based on WebGL 2</p></li>
+                <li><p>High level API: easier to use</p></li>
+                <li><p>Still have access to the WebGL API underneath</p></li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Three.js basics</h2>
+            <ul>
+                <li><p>Scene</p></li>
+                <li><p>Camera</p></li>
+                <li><p>Renderer</p></li>
+                <li><p>Mesh (Geometry, Material)</p></li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Let's practice!</h2>
+            <p>Go to the practice folder and follow the readme</p>
+        </section>
+
+        <section>
+            <h2>Animations</h2>
+            <ul>
+                <li><p>Animation loop</p></li>
+                <li><p>Optimization</p></li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Debugging / Helpers</h2>
+            <ul>
+                <li><p>OrbitControls</p></li>
+                <li><p>lil-gui</p></li>
+                <li><p>Axis helper</p></li>
+                <li><p>Grid helper</p></li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Materials</h2>
+            <ul>
+                <li><p>Lights</p></li>
+                <li><p>Texture</p></li>
+                <li><p>Shaders</p></li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>React Three Fiber</h2>
+            <ul>
+                <li><p>Declarative components</p></li>
+                <li><p>Leverage React lifecycle (reactivity, unmounts, ...)</p></li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Shadows</h2>
+            <ul>
+                <li><p>Texture shadows</p></li>
+                <li><p>Real shadows (using shadow maps)</p></li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Resources</h2>
+            <ul>
+                <li><a href="https://threejs.org/docs/" target="_blank">Three.js documentation/mentor</a></li>
+                <li><a href="https://threejs.org/manual/#en/fundamentals" target="_blank">Three.js fundamentals</a></li>
+                <li><a href="https://discoverthreejs.com/" target="_blank">Discover three.js book</a></li>
+                <li><a href="https://threejs-journey.com/" target="_blank">Three.js journey course</a></li>
+                <li><a href="https://r3f.docs.pmnd.rs/getting-started/your-first-scene" target="_blank">React three fiber</a></li>
+                <li><a href="https://drei.docs.pmnd.rs/getting-started/introduction" target="_blank">Drei (R3F helpers)</a></li>
+            </ul>
+        </section>
+    </div>
+</div>
+
+<script src="dist/reveal.js"></script>
+<script src="plugin/notes/notes.js"></script>
+<script src="plugin/markdown/markdown.js"></script>
+<script>
+    Reveal.initialize({
+        hash: true,
+        plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+    });
+</script>
+</body>
+
+</html>
