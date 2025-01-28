@@ -1,27 +1,31 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import {
-  ANIMATION,
-  CANNON,
-  Confetti,
-  PHYSICS,
-  Point,
-  colors,
-  draw3DConfetti,
-  drawCircle,
-  drawLine,
-  getLineAngle,
-  getLineLength,
-  isConfettiVisible,
-  shapes,
-} from '../common'
-import { StyledCanvas } from '../components/Canvas'
-import { useCanvas } from '../components/CanvasHooks'
-import { Level } from '../components/Level'
+import { useCallback, useEffect, useRef, useState } from "react"
+import { ANIMATION, CANNON, Confetti, PHYSICS, Point, colors, draw3DConfetti, drawCircle, drawLine, getLineAngle, getLineLength, isConfettiVisible, shapes } from "../common"
 
-const useDrawLineOnClick = (
+export const useCanvas = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const ctxRef = useRef<CanvasRenderingContext2D | null>(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    canvas.width = 400
+    canvas.height = 400
+
+    ctxRef.current = ctx
+    ctx.lineWidth = 2
+    ctxRef.current!.strokeStyle = '#0C2886'
+  }, [])
+
+  return { canvasRef, ctxRef }
+}
+
+export const useDrawLineOnClick = (
   canvasRef: React.RefObject<HTMLCanvasElement>,
   ctxRef: React.RefObject<CanvasRenderingContext2D | null>,
-  // we now have a function to call when the click is released
   onLineRelease?: (startPoint: Point, endPoint: Point) => void,
 ) => {
   // store click points coordinates
@@ -67,7 +71,6 @@ const useDrawLineOnClick = (
     }
   }, [handleMouseDown, handleMouseUp, handleMouseMove])
 
-  // we now expose only the draw function in this hook
   const drawLineAndCircle = (ctx: CanvasRenderingContext2D) => {
     if (startPoint && endPoint) {
       drawLine(ctx, startPoint, endPoint)
@@ -120,14 +123,16 @@ const useConfetti = () => {
     }
   }
 
-  // we now expose a function to add confettis at a specific point
   const addConfettiAt = useCallback((startPoint: Point, endPoint: Point) => {
     const lineLength = getLineLength(startPoint, endPoint)
 
-    // Create a variable amount of confetti based on the line length
-    const confettisAmount = Math.min(150, Math.max(20, Math.floor(lineLength * 2)))
-    for (let i = 0; i < confettisAmount; i++) {
+    // Create confetti with different probabilities based on speed range
+    const baseConfettiAmount = Math.min(150, Math.max(20, Math.floor(lineLength * 2)))
+    for (let i = 0; i < baseConfettiAmount; i++) {
+      // Only create slow confetti 10% of the time
+      if (Math.random() < 0.9 || confettis.current.length < baseConfettiAmount * 0.1) {
         confettis.current.push(createConfetti(startPoint, endPoint, lineLength))
+      }
     }
   }, [])
 
@@ -151,22 +156,34 @@ const useConfetti = () => {
   return { drawConfetti, addConfettiAt }
 }
 
-const useCombinedAnimation = (
+export const useCombinedAnimation = (
   canvasRef: React.RefObject<HTMLCanvasElement>,
   ctxRef: React.RefObject<CanvasRenderingContext2D | null>,
 ) => {
-  
-}
+  const animationFrameId = useRef<number>()
+  const { drawConfetti, addConfettiAt } = useConfetti()
+  const { drawLineAndCircle } = useDrawLineOnClick(canvasRef, ctxRef, addConfettiAt)
 
-// Canvas Component
-const Level8Canvas = () => {
-  const { canvasRef, ctxRef } = useCanvas()
-  useCombinedAnimation(canvasRef, ctxRef)
-  return <StyledCanvas ref={canvasRef} />
-}
+  useEffect(() => {
+    const canvas = canvasRef.current
+    const ctx = ctxRef.current
+    if (!canvas || !ctx) return
 
-export const Level8 = () => (
-  <Level level={8} title="Merge line and confettis animations">
-    <Level8Canvas />
-  </Level>
-)
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+      drawConfetti(ctx)
+      drawLineAndCircle(ctx)
+
+      animationFrameId.current = requestAnimationFrame(animate)
+    }
+
+    animate()
+
+    return () => {
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current)
+      }
+    }
+  }, [canvasRef, ctxRef, drawConfetti, drawLineAndCircle])
+}

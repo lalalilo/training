@@ -75,7 +75,7 @@ export const LevelNav = styled.nav`
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
-  max-width: 400px;
+  max-width: 120px;
   justify-content: flex-end;
   padding: 1rem;
 `
