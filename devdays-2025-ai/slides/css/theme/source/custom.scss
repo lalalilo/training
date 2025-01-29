@@ -1,0 +1,118 @@
+/**
+ * Black theme for reveal.js. This is the opposite of the 'white' theme.
+ *
+ * By Hakim El Hattab, http://hakim.se
+ */
+
+
+// Default mixins and settings -----------------
+@use "sass:color";
+@import "../template/mixins";
+@import "../template/settings";
+// ---------------------------------------------
+
+
+// Include theme-specific fonts
+@import url(./fonts/source-sans-pro/source-sans-pro.css);
+
+
+// Override theme settings (see ../template/settings.scss)
+$backgroundColor: #252334;
+
+$mainColor: #fff;
+$headingColor: #F7DD71;
+
+$mainFontSize: 42px;
+$mainFont: 'Fira Code', Helvetica, sans-serif;
+$headingFont: 'Fira Code', Helvetica, sans-serif;
+$headingTextShadow: none;
+$headingLetterSpacing: normal;
+$headingTextTransform: uppercase;
+$headingFontWeight: 600;
+$selectionBackgroundColor: #614D85;
+$selectionColor: #fff;
+$linkColor: #614D85;
+$linkColorHover: $linkColor;
+$heading1Size: 2.5em;
+$heading2Size: 1.6em;
+$heading3Size: 1.3em;
+$heading4Size: 1.0em;
+
+// Theme template ------------------------------
+@import "../template/theme";
+// ---------------------------------------------
+
+
+$red: #F97E72;
+$yellow: #F7DD71;
+$green: #73F1B8;
+$purple: #614D85;
+$cyan: #34EFEE;
+$pink: #EE84D6;
+
+
+$inlineCodeColor: $green;
+
+// Theme template ------------------------------
+@import "../template/theme";
+// ---------------------------------------------
+
+:root {
+    --r-bold-color: #{$yellow};
+    --r-italic-color: #{$yellow};
+    --r-inline-code-color: #{$inlineCodeColor};
+}
+
+.reveal {
+
+    strong,
+    b {
+        color: var(--r-bold-color);
+    }
+
+    em,
+    i,
+    blockquote {
+        color: var(--r-italic-color);
+    }
+
+    code {
+        color: var(--r-inline-code-color);
+    }
+
+    a {
+        color: #F7DD71;
+        text-decoration: underline;
+        text-underline-offset: 4px;
+        font-weight: 500;
+
+        &:hover {
+            background-color: #F7DD71;
+            text-decoration: none;
+            color: #252334;
+        }
+    }
+
+    .slide-number {
+        background-color: transparent;
+        color: #614D85;
+        left: 8px;
+        bottom: 8px;
+        font-family: unset;
+        font-size: 20px;
+
+        &>a {
+            text-decoration: none;
+
+            &:hover {
+                background-color: transparent;
+                color: #614D85;
+            }
+        }
+
+    }
+
+    .controls {
+        transform: scale(0.5);
+    }
+}
