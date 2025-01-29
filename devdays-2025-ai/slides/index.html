@@ -49,20 +49,19 @@
 
         <aside class="notes" data-markdown>
           # Greg
-          Faux titre du training.
 
-          Grosse hype AI depuis quelques années, tout le monde veut en faire, des entreprises veulent remplacer des
+
+          - Faux titre du training vous serez pas des sorciers
+          - Nous on veut **démystifier** l'IA
+          - Grosse hype AI depuis quelques années, tout le monde veut en faire, des entreprises veulent remplacer des
           salariés avec, ça a l'air magique et mystérieux.
 
-          Devenir un prompt engineer ou perdre son taff? : **Lecture simpliste et pas l'objectif de ce training**
-
-          ---
+---
 
           Hype IA = techno génératives => LLM (chatgpt)
 
           Il y a pas réelement d'intelligence dedans (au sens pas un système expert)
 
-          En l'état actuel, un nouvel outil pour notre travail plutôt qu'un profond changement de paradigme
         </aside>
       </section>
 
@@ -76,15 +75,24 @@
         </ul>
       <aside class="notes" data-markdown>
         # Greg
-        ## Understand how AI models work
+
+        ## Goals
+        - **Understand how AI models work**
           - Sans détails technique, ce qui est nécessaire pour un dev
           - Vulgariser les termes qu'on voit partout
-        ## Know Renaissance's stance on the topic
-        ## Understand how developers can use them in products they build
+        - **Know Renaissance's stance on the topic**
+        - **Understand how developers can use them in products they build**
+
+        ## Schedule
+        - General information (20min)
+        - Workshop 1 (15-30min)
+        - How to build an AI product? (30min)
+        - Workshop 2 (plein de minutes)
+
+
       </aside>
+
       </section>
-
-
       <section class="flex flex-col">
         <h2>What exactly is a
           <br />
@@ -190,8 +198,10 @@
 
           <aside class="notes" data-markdown>
             # Greg
-            Via une API parce que c'est aussi monétisé / pas open source 
 
+            Easy to use (habitude de setup ça)
+            
+            Via une API parce que c'est aussi monétisé / pas open source 
 
             Model local de 3GB à 260GB.
             Pas n'importe quel modèle sur n'importe quelle machine. 
@@ -319,8 +329,12 @@
 
         <aside class="notes" data-markdown>
           # Greg
-          Pricing par million de token; un token approximation à un mots
-          Pourquoi input/output ? Processe la question, processe réponse
+          
+          Présentation des différents acteurs principaux
+
+          - Pricing par million de token; un token approximation à un mots
+              Pourquoi input/output ? Processe la question, processe réponse
+
 
 
           - **OpenAI** = market leader, a lancé la nouvelle vague de LLMs avec ChatGPT
@@ -328,8 +342,8 @@
             - Copilot inline cherche instantanéité
           - Moyen modèle = bon compromis performance / coût pour une appli LLM centric (chatGPT, Claude)
             - Plus long, copilot chat (application centré sur l'IA - utilisateur prêt à attendre quelques secondes)
-          - Gros modèle = arms-race recherche, très lent, pas forcément user centric (cf o3)
-            - 1 minute de temps de réponse; plus orienté recherche 
+          - Gros modèle = très lent, pas forcément user centric (cf o3)
+            - 1 minute de temps de réponse; plus orienté R&D (pour flexer entre entreprise concurrentes) 
           - **Anthropic** = Le challenger, très reconnu notament pour Sonnet 3.5 v2 très performant, mais aussi Haiku
           (petit) et Opus (gros)
           - **Meta** vise plutot l'open source et sont les premiers dans le domaine
@@ -338,9 +352,9 @@
 
 
           Moyen de comparer des modèles c'est aussi comparer les prix des tokens
-          Pricing et performance pas forcément linéaire.
           o4-mini plus de dix fois moins cher, mais pas dix fois moins performant sur une tâche simple
-
+          Globalement plus un modèle est cher plus il va être intelligent
+          
         </aside>
       </section>
 
@@ -375,6 +389,9 @@
 
           ---
           Facile d'avoir 80% difficile d'avoir production ready
+          
+          LLM tout seul c'est pas suffisant 
+          Un produit AI c'est pas un LLM
 
         </aside>
       </section>
@@ -386,6 +403,7 @@
           <p>It can do a few things base models can't do:</p>
           <aside class="notes" data-markdown>
           # Greg
+          Etude de cas - Copilot
 
           Exemple de produit basé sur un LLM
           Mais qui n'est pas une application strict et direct, ce n'est pas juste un appel API
@@ -412,9 +430,9 @@
           <aside class="notes" data-markdown>
           # Greg
 
-          Capable de naviguer dans le code 
-          Capable d'indentifier les zones pertinantes
-          Mais pourtant vous imaginez bien qu'il a pas toute la codebase en context 
+          - Capable de naviguer dans le code 
+          - Capable d'indentifier les zones pertinantes
+          - Mais pourtant vous imaginez bien qu'il a pas toute la codebase en context (on verra ça plus tard)
         </aside>
         </section>
 
@@ -508,7 +526,12 @@
       <section>
         <section>
           <h3>Are we actually ok with these risks?</h3>
+          <aside class="notes" data-markdown>
+            # Greg
 
+            - Deux grands risques: privacy & output généré 
+            - Quelle est la position de RL ?
+          </aside>
         </section>
 
         <section>
@@ -518,7 +541,7 @@
             company at risk.</p>
           
           <aside class="notes" data-markdown>
-            # Greg
+            # Greg - OUI
 
             - RL très encourgeant à utiliser l'IA - enjeux stratégique (marché, investisseurs, concurrence et notamment de nouveaux arrivants)
             - RL pourrait risquer sa réputation et son business existant 
@@ -532,7 +555,7 @@
           </p>
 
           <aside class="notes" data-markdown>
-            # Greg
+            # Greg - Oui mais
 
             - Confiant dans la privacy - AzureAI donné des élèves sont pas à risque
             - Moins confiant sur l'output d'un modèle 
@@ -555,6 +578,13 @@
             </li>
           </ul>
 
+          <aside class="notes" data-markdown>
+            # Greg
+
+            - RL rassembler un peu ça dans plusieurs policies et guidelines
+            - Si vous voulez utiliser à des fins professionnelles un outil IA il doit être approuvé par RL
+            - AzureAI est approuvé
+          </aside>
         </section>
       </section>
 
@@ -625,7 +655,12 @@
           <aside class="notes" data-markdown>
             # Greg
             La plupart des libs d'utilitaires LLMs permettent de formater les outputs en JSON
-            Les API OpenAI le permettent nativement.
+            
+            Intérêt c'est intéragir avec les résultats via des process automatiques - garanti du format de donnée
+
+            Exemple d'utilisation: permet d'utiliser les retours d'un LLM dans une API par exemple
+            sévérité - critical, medium et couleur associé
+
           </aside> 
         </section>
 
@@ -643,9 +678,6 @@
           <aside class="notes" data-markdown>
             # Greg
             La plupart des libs d'utilitaires LLMs permettent de formater les outputs en JSON
-            Les API OpenAI le permettent nativement.
-
-            Intérêt c'est intéragir avec les résultats via des process automatiques - garanti du format de donnée
           </aside> 
         </section>
       </section>
@@ -690,15 +722,18 @@
           </p>
           <aside class="notes" data-markdown>
             # Greg
-            
-            - Quantifier la qualité d’un prompt
+            Outils qui permettent de définir des métriques de succès et de les évaluer sur un modèle/un prompt. 
+
+            - Vérifier la qualité d’un prompt
             - Valider qu’un changement de modèle ou de prompt n’impacte pas négativement la qualité du produit
-            - Comme les tests automatisés en dev: prompt = code, model = version de node
-            - Tests non déterministes donc on doit calculé un score aggrégé sur plusieurs runs
             - Certaines métriques définies par du code, d'autres par d'autres LLMs
 
-            Exemple: workshop 1 
-            On a un dataset sur lequel on connait les réponses attendues
+            ## Exemple: workshop 1 
+            
+            - On a un dataset sur lequel on connait les réponses attendues (déterministe)
+            
+            - Créer un résumé - model pour savoir si bon résumé (avec des critères de succès - la présence de tel ou tel éléments)
+
             Capable de changer de prompt ou de model et d'évaluer la meilleure combinaison
         </aside>
         </section>
@@ -800,6 +835,9 @@
 
           <aside class="notes" data-markdown>
             # Greg
+
+            Agent c'est un système qui comprend un ou plusieurs LLM et un ou plusieurs tool
+            
             Rendre un LLM un autonome
           </aside>
         </section>
@@ -820,7 +858,10 @@
           </ul>
           <aside class="notes" data-markdown>
             # Greg
-            Récupérer des informations d'une base d'information 
+            
+            - Récupérer des informations d'une base d'information 
+            - Récupérer la météo sur une API externe
+            - Appeler du code interne
           </aside>
         </section>
 
