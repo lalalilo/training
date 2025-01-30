@@ -2,11 +2,8 @@ import { useMachine, useSelector } from "@xstate/react";
 import { useState } from "react";
 import styled from "styled-components";
 import "./App.css";
-import {
-  getStepName,
-  pomodoroMachine,
-  PomodoroMachineRef,
-} from "./machines/pomodoroMachine";
+import { getStepName, pomodoroMachine } from "./pomodoroMachine";
+import { TimerMachineRef } from "./timerMachine";
 
 function convertSecondsToTime(seconds: number) {
   const minutes = Math.floor(seconds / 60);
@@ -22,13 +19,22 @@ function padTime(minsOrSecs: number) {
 }
 
 function App() {
-  const [snapshot, send, ref] = useMachine(pomodoroMachine);
+  const [snapshot, send] = useMachine(pomodoroMachine);
 
   const [sessionDuration, setSessionDuration] = useState(
     snapshot.context.sessionDuration
   );
   const [longBreak, setLongBreak] = useState(snapshot.context.longBreak);
   const [shortBreak, setShortBreak] = useState(snapshot.context.shortBreak);
+
+  const can = snapshot.can.bind(snapshot);
+
+  const resetAction = () =>
+    send({
+      type: "reset",
+    });
+
+  const canRest = !can({ type: "reset" });
 
   return (
     <div className="App">
@@ -61,7 +67,7 @@ function App() {
           </InputWrapper>
           <Button
             onClick={() =>
-              send({ type: "start", sessionDuration, longBreak, shortBreak })
+              send({ type: "START", sessionDuration, longBreak, shortBreak })
             }
           >
             Start
@@ -70,7 +76,11 @@ function App() {
       ) : (
         <>
           <h2>{getStepName(snapshot.context.currentCycle)}</h2>
-          <Timer pomodoroMachine={ref} />
+          <Timer
+            stopWatchMachine={snapshot.context.timer}
+            resetAction={resetAction}
+            canReset={canRest}
+          />
           <div>Nb de cycle: {snapshot.context.currentCycle % 3}</div>
         </>
       )}
@@ -79,17 +89,19 @@ function App() {
 }
 
 interface TimerProps {
-  pomodoroMachine: PomodoroMachineRef;
+  stopWatchMachine: TimerMachineRef;
+  resetAction: () => void;
+  canReset: boolean;
 }
 
-const Timer = ({ pomodoroMachine }: TimerProps) => {
-  const machineSeconds = useSelector(
-    pomodoroMachine,
-    (snapshot) => snapshot.context.stepSeconds
+const Timer = ({ stopWatchMachine, resetAction, canReset }: TimerProps) => {
+  const sec = useSelector(
+    stopWatchMachine,
+    (snapshot) => snapshot.context.seconds
   );
 
-  const snapshot = pomodoroMachine.getSnapshot();
-  const { minutes, seconds } = convertSecondsToTime(machineSeconds);
+  const snapshot = stopWatchMachine.getSnapshot();
+  const { minutes, seconds } = convertSecondsToTime(sec);
   const can = snapshot.can.bind(snapshot);
 
   return (
@@ -99,7 +111,7 @@ const Timer = ({ pomodoroMachine }: TimerProps) => {
       </h1>
       <Button
         onClick={() =>
-          pomodoroMachine.send({
+          stopWatchMachine.send({
             type: "minute",
           })
         }
@@ -109,7 +121,7 @@ const Timer = ({ pomodoroMachine }: TimerProps) => {
       </Button>
       <Button
         onClick={() =>
-          pomodoroMachine.send({
+          stopWatchMachine.send({
             type: "second",
           })
         }
@@ -117,46 +129,29 @@ const Timer = ({ pomodoroMachine }: TimerProps) => {
       >
         sec
       </Button>
-      <Button
-        onClick={() =>
-          pomodoroMachine.send({
-            type: "reset",
-          })
-        }
-        disabled={!can({ type: "reset" })}
-      >
+      <Button onClick={resetAction} disabled={canReset}>
         reset
       </Button>
       <Button
         onClick={() =>
-          pomodoroMachine.send({
-            type: "play",
+          stopWatchMachine.send({
+            type: "start",
           })
         }
         // Don't know why it it not rerendered on button click (same for other but less painful)
-        disabled={!can({ type: "play" })}
+        //disabled={!can({ type: "start" })}
       >
         start
       </Button>
       <Button
         onClick={() =>
-          pomodoroMachine.send({
-            type: "pause",
-          })
-        }
-        disabled={!can({ type: "pause" })}
-      >
-        Pause
-      </Button>
-      <Button
-        onClick={() =>
-          pomodoroMachine.send({
+          stopWatchMachine.send({
             type: "stop",
           })
         }
         disabled={!can({ type: "stop" })}
       >
-        Stop
+        Pause
       </Button>
     </div>
   );
