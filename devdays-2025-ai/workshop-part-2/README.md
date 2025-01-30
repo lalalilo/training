@@ -10,7 +10,7 @@ It is meant to provide a working starting point to try out related AI technologi
 1. This project uses Bun. Install it and the project dependencies with:
 
 ```bash
-brew install bun
+brew install oven-sh/bun/bun
 bun install
 ```
 
