@@ -9,7 +9,7 @@ type ErrorMessage = {
 };
 
 const ERROR_COLOR = "a30200";
-const client = new WebClient(process.env.SLACK_TOKEN, {
+export const slackClient = new WebClient(process.env.SLACK_TOKEN, {
   logLevel: LogLevel.ERROR,
 });
 
@@ -17,7 +17,7 @@ const client = new WebClient(process.env.SLACK_TOKEN, {
 const channelId = "C02FW8DGG2F";
 
 try {
-  const result = await client.conversations.history({
+  const result = await slackClient.conversations.history({
     channel: channelId,
     limit: 200,
   });
@@ -31,7 +31,7 @@ try {
     if (!message.ts) {
       continue;
     }
-    const replies = await client.conversations.replies({
+    const replies = await slackClient.conversations.replies({
       channel: channelId,
       ts: message.ts,
     });
