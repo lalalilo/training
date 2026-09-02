@@ -1,0 +1,843 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Harness — Applied to the Lalilo Monorepo</title>
+    <style>
+      :root {
+        --bg: #0d1117;
+        --panel: #161b22;
+        --panel2: #1c2330;
+        --ink: #e6edf3;
+        --muted: #8b949e;
+        --accent: #58a6ff;
+        --green: #3fb950;
+        --amber: #d29922;
+        --red: #f85149;
+        --purple: #bc8cff;
+        --line: #30363d;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+          Arial, sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        overflow: hidden;
+      }
+      .deck {
+        height: 100vh;
+        width: 100vw;
+        position: relative;
+      }
+      .slide {
+        position: absolute;
+        inset: 0;
+        display: none;
+        flex-direction: column;
+        padding: 42px 58px 74px;
+        animation: fade 0.35s ease;
+      }
+      .slide.active {
+        display: flex;
+      }
+      @keyframes fade {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      h1 {
+        font-size: 42px;
+        line-height: 1.1;
+        margin-bottom: 10px;
+        letter-spacing: -0.5px;
+      }
+      h2 {
+        font-size: 29px;
+        margin-bottom: 16px;
+        letter-spacing: -0.3px;
+      }
+      h2 .pin {
+        color: var(--accent);
+      }
+      .sub {
+        color: var(--muted);
+        font-size: 17px;
+        margin-bottom: 22px;
+        max-width: 920px;
+      }
+      .kicker {
+        color: var(--accent);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 13px;
+        margin-bottom: 12px;
+      }
+      ul {
+        list-style: none;
+      }
+      li {
+        padding: 7px 0 7px 26px;
+        position: relative;
+        font-size: 16px;
+        line-height: 1.4;
+        border-bottom: 1px solid var(--line);
+      }
+      li:before {
+        content: '•';
+        position: absolute;
+        left: 0;
+        color: var(--accent);
+      }
+      li b {
+        color: #fff;
+      }
+      .center {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+      .center h1 {
+        font-size: 52px;
+        background: linear-gradient(90deg, #58a6ff, #bc8cff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .center .sub {
+        font-size: 21px;
+        max-width: 800px;
+      }
+      .pills {
+        display: flex;
+        gap: 9px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 24px;
+      }
+      .pill {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 30px;
+        padding: 7px 16px;
+        font-size: 14px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 15px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 9px 12px;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+      }
+      th {
+        color: var(--accent);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      td b {
+        color: #fff;
+      }
+      .tag {
+        font-size: 11px;
+        font-weight: 700;
+        padding: 2px 8px;
+        border-radius: 20px;
+        display: inline-block;
+        white-space: nowrap;
+      }
+      .t-red {
+        background: rgba(248, 81, 73, 0.15);
+        color: var(--red);
+        border: 1px solid var(--red);
+      }
+      .t-amber {
+        background: rgba(210, 153, 34, 0.15);
+        color: var(--amber);
+        border: 1px solid var(--amber);
+      }
+      .t-green {
+        background: rgba(63, 185, 80, 0.15);
+        color: var(--green);
+        border: 1px solid var(--green);
+      }
+      .t-blue {
+        background: rgba(88, 166, 255, 0.15);
+        color: var(--accent);
+        border: 1px solid var(--accent);
+      }
+      .phase {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .phase .num {
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--accent);
+        min-width: 42px;
+      }
+      .phase .body h4 {
+        font-size: 15px;
+        margin-bottom: 2px;
+      }
+      .phase .body p {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.35;
+      }
+      .phase .body code {
+        background: var(--panel2);
+        padding: 1px 5px;
+        border-radius: 4px;
+        font-size: 12px;
+        color: var(--purple);
+      }
+      pre {
+        background: #0a0e14;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 16px 18px;
+        overflow: auto;
+        flex: 1;
+        font-size: 13.5px;
+        line-height: 1.5;
+      }
+      pre code {
+        font-family: 'SF Mono', Menlo, Consolas, monospace;
+        color: var(--ink);
+      }
+      .cmt {
+        color: #6e7681;
+      }
+      .kw {
+        color: #ff7b72;
+      }
+      .str {
+        color: #a5d6ff;
+      }
+      .fn {
+        color: #d2a8ff;
+      }
+      .var {
+        color: #79c0ff;
+      }
+      .cols {
+        display: flex;
+        gap: 22px;
+        flex: 1;
+        min-height: 0;
+      }
+      .col {
+        flex: 1;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 20px;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+      }
+      .col h3 {
+        font-size: 18px;
+        margin-bottom: 12px;
+      }
+      .ref {
+        color: var(--muted);
+        font-size: 13px;
+        font-style: italic;
+        margin-top: auto;
+        padding-top: 12px;
+      }
+      code.inline {
+        background: var(--panel2);
+        padding: 2px 7px;
+        border-radius: 5px;
+        font-size: 0.9em;
+        color: var(--purple);
+      }
+      .have {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--green);
+        border: 1px solid var(--green);
+        border-radius: 5px;
+        padding: 1px 6px;
+        margin-left: 6px;
+      }
+      .new {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--amber);
+        border: 1px solid var(--amber);
+        border-radius: 5px;
+        padding: 1px 6px;
+        margin-left: 6px;
+      }
+      .footer {
+        position: absolute;
+        bottom: 22px;
+        left: 58px;
+        right: 58px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--muted);
+        font-size: 13px;
+        border-top: 1px solid var(--line);
+        padding-top: 12px;
+      }
+      .dots {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        max-width: 55%;
+      }
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--line);
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .dot.on {
+        background: var(--accent);
+        width: 22px;
+        border-radius: 5px;
+      }
+      .nav {
+        position: absolute;
+        bottom: 16px;
+        right: 58px;
+        display: flex;
+        gap: 8px;
+        z-index: 10;
+      }
+      .nav button {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        color: var(--ink);
+        width: 38px;
+        height: 38px;
+        border-radius: 9px;
+        cursor: pointer;
+        font-size: 18px;
+        transition: 0.15s;
+      }
+      .nav button:hover {
+        background: var(--accent);
+        color: #000;
+        border-color: var(--accent);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="deck" id="deck">
+      <!-- 1 -->
+      <section class="slide active center">
+        <div class="kicker">Part II · Real Application</div>
+        <h1>The AI Harness,<br />Applied to Lalilo</h1>
+        <p class="sub">
+          7 apps · Turbo + Yarn workspaces · Node 22.22.0 · CircleCI · ArgoCD ·
+          Sequelize→Drizzle in flight. First the risks → mechanisms; then the
+          phased rollout with real paths.
+        </p>
+        <div class="pills">
+          <span class="pill">lalilo-api</span><span class="pill">pedagogy</span
+          ><span class="pill">student-app</span
+          ><span class="pill">back-office</span
+          ><span class="pill">teach-app</span><span class="pill">location</span
+          ><span class="pill">renintel-mock</span>
+        </div>
+      </section>
+
+      <!-- 2: what already exists -->
+      <section class="slide">
+        <div class="kicker">Starting Point — we extend, not replace</div>
+        <h2>
+          Lalilo already has harness primitives
+          <span class="pin">in place</span>
+        </h2>
+        <div class="cols">
+          <div class="col">
+            <h3>✅ Already present</h3>
+            <ul>
+              <li>
+                <code class="inline">CLAUDE.md</code> — layered-arch rules,
+                commit/PR conventions, "never
+                <code class="inline">git add .</code>"
+              </li>
+              <li>
+                <code class="inline">.husky/pre-commit</code> → lint-staged;
+                <code class="inline">pre-push</code> → check-deps +
+                protected-branch confirm
+              </li>
+              <li>
+                <code class="inline"
+                  >.github/workflows/claude-pr-review.yml</code
+                >
+                — on <code class="inline">@claude-pr-review</code>, AWS OIDC
+              </li>
+              <li>
+                <code class="inline">argocd-diff.yml</code> — deploy diff
+                visibility
+              </li>
+              <li>
+                <code class="inline">.claude/skills/</code> — start-ticket,
+                watch-ci, get-current-ticket, write-validation-criteria
+              </li>
+              <li>
+                <code class="inline">yarn test:structure</code> — architectural
+                constraint tests
+              </li>
+              <li>SessionStart hook — Node-version mismatch guard</li>
+            </ul>
+          </div>
+          <div class="col">
+            <h3>❌ Gaps for shipping to customers</h3>
+            <ul>
+              <li>
+                No <b>PreToolUse</b> deny-gate on destructive DB / infra ops
+              </li>
+              <li>
+                No <b>cross-app</b> staged-path enforcement (only an
+                instruction)
+              </li>
+              <li>No <b>verification-before-done</b> / stop-phrase guard</li>
+              <li>
+                No per-app <code class="inline">.claude/rules/</code> for
+                layered-arch
+              </li>
+              <li>No <b>self-improving</b> gardener / tech-debt loop</li>
+              <li>No <b>AI-change provenance</b> tagging</li>
+              <li>No <b>lockfile / supply-chain</b> gate on AI PRs</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3: TRACK 1 — risks to mechanisms -->
+      <section class="slide">
+        <div class="kicker">Track 1 — Risk → Mechanism</div>
+        <h2>The 4 lalilo risks, mapped to concrete guards</h2>
+        <table>
+          <tr>
+            <th>Risk</th>
+            <th>Pri</th>
+            <th>Mechanism in lalilo</th>
+          </tr>
+          <tr>
+            <td>
+              <b>Secrets / prod / infra</b><br /><span
+                style="font-size: 12px; color: var(--muted)"
+                >DB, k8s, ArgoCD</span
+              >
+            </td>
+            <td><span class="tag t-red">TOP</span></td>
+            <td>
+              PreToolUse Bash deny-list (<code class="inline">migrate down</code
+              >, <code class="inline">drop</code>,
+              <code class="inline">kubectl/argocd</code> mutations) +
+              secret-scan on Edit/Write. <b>Rule of Two</b>: deploy actions
+              human-gated. Keep AWS OIDC (already in claude-pr-review).
+            </td>
+          </tr>
+          <tr>
+            <td><b>Cross-app blast radius</b></td>
+            <td><span class="tag t-amber">High</span></td>
+            <td>
+              Pre-commit hook rejects staged files spanning &gt;1 app dir under
+              <code class="inline">apps/</code>; harden "never
+              <code class="inline">git add .</code>" into enforcement.
+              Worktree-per-ticket via start-ticket skill.
+            </td>
+          </tr>
+          <tr>
+            <td><b>False "done" / unverified</b></td>
+            <td><span class="tag t-amber">High</span></td>
+            <td>
+              Stop hook phrase-guard + verify-before-done wired to per-app
+              <code class="inline"
+                >yarn test:unit / test:integration / check-types</code
+              >
+              + migration check. Reuse watch-ci skill.
+            </td>
+          </tr>
+          <tr>
+            <td><b>Architecture drift</b></td>
+            <td><span class="tag t-blue">Med</span></td>
+            <td>
+              Per-app
+              <code class="inline">.claude/rules/&lt;app&gt;.md</code>
+              (routes→services→data-layer, no Sequelize outside queries). Extend
+              <code class="inline">yarn test:structure</code> as required CI
+              check.
+            </td>
+          </tr>
+        </table>
+        <p class="ref">
+          Top risk lives in a deterministic hook — it fires even if the model
+          ignores CLAUDE.md.
+        </p>
+      </section>
+
+      <!-- 4: TRACK 2 — phased rollout -->
+      <section class="slide">
+        <div class="kicker">Track 2 — Phased Rollout</div>
+        <h2>P1–P8 · sequenced, each phase shippable</h2>
+        <div style="flex: 1; overflow: auto">
+          <div class="phase">
+            <div class="num">P1</div>
+            <div class="body">
+              <h4>
+                🔒 Secrets / prod / infra <span class="tag t-red">TOP</span>
+                <span class="new">new</span>
+              </h4>
+              <p>
+                PreToolUse deny-list + secret-scan; Rule-of-Two human gate on
+                ArgoCD/k8s; managed-settings fail-closed.
+              </p>
+            </div>
+          </div>
+          <div class="phase">
+            <div class="num">P2</div>
+            <div class="body">
+              <h4>🧭 Cross-app blast-radius <span class="new">new</span></h4>
+              <p>
+                Extend <code>.husky/pre-commit</code> to reject multi-app staged
+                sets; worktree-per-ticket.
+              </p>
+            </div>
+          </div>
+          <div class="phase">
+            <div class="num">P3</div>
+            <div class="body">
+              <h4>✅ Verification-before-done <span class="new">new</span></h4>
+              <p>
+                Stop-phrase-guard + 4-tier verify on per-app
+                test/types/migrations. Reuse <span class="have">watch-ci</span>.
+              </p>
+            </div>
+          </div>
+          <div class="phase">
+            <div class="num">P4</div>
+            <div class="body">
+              <h4>📐 Architecture-drift rules <span class="new">new</span></h4>
+              <p>
+                <code>.claude/rules/&lt;app&gt;.md</code>; extend
+                <span class="have">yarn test:structure</span> as required CI
+                gate.
+              </p>
+            </div>
+          </div>
+          <div class="phase">
+            <div class="num">P5</div>
+            <div class="body">
+              <h4>⚡ Friction + reuse <span class="new">new</span></h4>
+              <p>
+                Curate <code>settings.json</code>
+                <code>permissions.allow</code> per-app; shared skills at root,
+                per-app rule files for diffs.
+              </p>
+            </div>
+          </div>
+          <div class="phase">
+            <div class="num">P6</div>
+            <div class="body">
+              <h4>🤖 Self-improving loop <span class="new">new</span></h4>
+              <p>
+                CircleCI scheduled gardener + tech-debt-collector per app; track
+                rework + first-pass acceptance.
+              </p>
+            </div>
+          </div>
+          <div class="phase">
+            <div class="num">P7</div>
+            <div class="body">
+              <h4>
+                🏷️ Provenance + clean-revert hygiene
+                <span class="have">partial</span>
+              </h4>
+              <p>
+                Tag AI commits w/ model+session; PR-only; extend
+                <span class="have">claude-pr-review</span> to fire on every PR
+                open; atomic revertible changes.
+              </p>
+            </div>
+          </div>
+          <div class="phase">
+            <div class="num">P8</div>
+            <div class="body">
+              <h4>📦 Supply chain <span class="new">new</span></h4>
+              <p>
+                Pin deps; review lockfile diff in AI PRs;
+                <code>yarn audit</code> gate; audit MCP servers.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5: P1 snippet -->
+      <section class="slide">
+        <div class="kicker">P1 — Concrete · TOP priority</div>
+        <h2>PreToolUse deny-gate for prod / infra / secrets</h2>
+        <pre><code><span class="cmt"># .claude/hooks/guard-dangerous-bash.sh  — wired as PreToolUse(Bash)</span>
+<span class="cmt"># exit 2 = block unconditionally (deterministic, model can't override)</span>
+<span class="kw">cmd</span>=$(jq -r <span class="str">'.tool_input.command'</span>)
+
+<span class="cmt"># 1. Destructive DB / migrations</span>
+<span class="kw">case</span> <span class="str">"$cmd"</span> <span class="kw">in</span>
+  *<span class="str">"migrate down"</span>*|*<span class="str">"DROP "</span>*|*<span class="str">"TRUNCATE"</span>*|*<span class="str">"DELETE FROM"</span>*)
+    <span class="fn">echo</span> <span class="str">'{"decision":"block","reason":"Destructive DB op — run manually with review"}'</span>; <span class="kw">exit</span> 2 ;;
+<span class="cmt">  # 2. Infra mutations: k8s + ArgoCD must be human-gated (Rule of Two)</span>
+  *<span class="str">"kubectl apply"</span>*|*<span class="str">"kubectl delete"</span>*|*<span class="str">"argocd app sync"</span>*|*<span class="str">"helm upgrade"</span>*)
+    <span class="fn">echo</span> <span class="str">'{"decision":"block","reason":"Infra mutation — deploy is human-gated"}'</span>; <span class="kw">exit</span> 2 ;;
+  *<span class="str">"git push"</span>*<span class="str">" main"</span>*|*<span class="str">"git push"</span>*<span class="str">" staging"</span>*)
+    <span class="fn">echo</span> <span class="str">'{"decision":"block","reason":"Never push protected branch"}'</span>; <span class="kw">exit</span> 2 ;;
+<span class="kw">esac</span>
+<span class="kw">exit</span> 0  <span class="cmt"># everything else proceeds without a prompt → low friction</span></code></pre>
+        <p class="ref">
+          Pairs with secret-scan on Edit/Write (block writes containing key
+          patterns) + keeping AWS OIDC short-lived creds in CI. No static secret
+          on disk.
+        </p>
+      </section>
+
+      <!-- 6: P2 snippet -->
+      <section class="slide">
+        <div class="kicker">P2 — Concrete</div>
+        <h2>
+          Cross-app blast-radius guard in
+          <span class="pin">.husky/pre-commit</span>
+        </h2>
+        <pre><code><span class="cmt">#!/bin/sh</span>
+. <span class="str">"$(dirname "$0")/_/husky.sh"</span>
+
+yarn lint-staged
+
+<span class="cmt"># NEW: reject commits that span more than one app (monorepo contamination)</span>
+<span class="var">apps</span>=$(git diff --cached --name-only \
+  | grep <span class="str">'^apps/'</span> | cut -d/ -f2 | sort -u)
+<span class="var">count</span>=$(<span class="fn">echo</span> <span class="str">"$apps"</span> | grep -c .)
+
+<span class="kw">if</span> [ <span class="str">"$count"</span> -gt 1 ]; <span class="kw">then</span>
+  <span class="fn">echo</span> <span class="str">"✋ Staged changes span $count apps: $apps"</span>
+  <span class="fn">echo</span> <span class="str">"   Commit one app at a time (monorepo blast-radius guard)."</span>
+  <span class="fn">echo</span> <span class="str">"   Override: git commit --no-verify  (use deliberately)"</span>
+  <span class="kw">exit</span> 1
+<span class="kw">fi</span></code></pre>
+        <p class="ref">
+          Turns the CLAUDE.md instruction "stage only your app's files" into
+          deterministic enforcement. Human can still override with
+          <code class="inline">--no-verify</code>; the agent cannot silently
+          sweep 7 apps.
+        </p>
+      </section>
+
+      <!-- 7: P3 snippet -->
+      <section class="slide">
+        <div class="kicker">P3 — Concrete</div>
+        <h2>Verification-before-done — stop hook</h2>
+        <div class="cols">
+          <div class="col" style="flex: 1.3">
+            <pre
+              style="margin: 0"
+            ><code><span class="cmt"># .claude/hooks/verify-before-stop.sh — Stop hook</span>
+<span class="var">app</span>=$(cat .omc/state/active-app 2>/dev/null)
+[ -z <span class="str">"$app"</span> ] && <span class="kw">exit</span> 0
+
+<span class="kw">cd</span> apps/<span class="str">"$app"</span> || <span class="kw">exit</span> 0
+<span class="fn">yarn</span> check-types &gt;/dev/null 2&gt;&1 \
+  && <span class="fn">yarn</span> test:unit &gt;/dev/null 2&gt;&1 \
+  || { <span class="fn">echo</span> <span class="str">'{"decision":"block",
+    "reason":"types or unit tests fail — not done"}'</span>
+       <span class="kw">exit</span> 2; }</code></pre>
+          </div>
+          <div class="col">
+            <h3>+ phrase guard</h3>
+            <ul>
+              <li>
+                Block exit on <b>"pre-existing"</b>, <b>"known limitation"</b>,
+                <b>"should I continue"</b>
+              </li>
+              <li><b>test-author ≠ code-author</b> for new features</li>
+              <li>Adversarial self-review subagent on the diff</li>
+              <li>Harness overrides after 8 blocks (anti-loop)</li>
+            </ul>
+            <p class="ref">
+              Re-port the 4-tier verify hook that the reference repo built then
+              disabled — strongest false-done guard.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8: P4 rules -->
+      <section class="slide">
+        <div class="kicker">P4 — Concrete</div>
+        <h2>Per-app architecture rules + fitness function</h2>
+        <pre><code><span class="cmt"># .claude/rules/lalilo-api.md   (auto-loaded when touching apps/lalilo-api)</span>
+<span class="kw">## Layered architecture — enforced</span>
+- routes/      → controllers + yup schemas only, NO business logic
+- services/    → business logic, reusable
+- data-layer/  → models/ (Sequelize) + queries/ (one file per model)
+- policies/    → authz checks, called at start of controllers
+
+<span class="kw">## Hard rules</span>
+- NO Sequelize queries outside data-layer/queries/
+- Each *.queries.ts MUST have a matching integration test
+- Sub-routers require mergeParams: true
+- Migrating Sequelize → Drizzle: new code prefers Drizzle</code></pre>
+        <p class="ref">
+          CI enforcement:
+          <code class="inline">yarn test:structure</code> already exists → make
+          it a <b>required status check</b> so an AI PR violating layer
+          boundaries cannot merge. This is the architectural fitness function
+          (ThoughtWorks Radar 34).
+        </p>
+      </section>
+
+      <!-- 9: P6+P7 automation -->
+      <section class="slide">
+        <div class="kicker">P6 + P7 — Self-improving & provenance</div>
+        <h2>Scheduled quality + traceable AI changes</h2>
+        <div class="cols">
+          <div class="col">
+            <h3>🤖 P6 — weekly CircleCI agents</h3>
+            <ul>
+              <li>
+                <b>gardener</b> — audit golden principles per app, draft ≤3
+                capped issues/run
+              </li>
+              <li>
+                <b>tech-debt-collector</b> — rank files by LOC, simplify, revert
+                on type errors, one PR
+              </li>
+              <li>
+                Gate: <code class="inline">yarn test:structure</code> +
+                <code class="inline">check-types</code> before commit
+              </li>
+              <li>Track <b>rework rate</b> + <b>first-pass acceptance</b></li>
+            </ul>
+          </div>
+          <div class="col">
+            <h3>🏷️ P7 — provenance + clean revert</h3>
+            <ul>
+              <li>
+                Commit trailer:
+                <code class="inline">AI-Model: claude-opus-4-8</code> +
+                <code class="inline">AI-Session: &lt;id&gt;</code>
+              </li>
+              <li>
+                Extend <span class="have">claude-pr-review</span> to fire on
+                <b>every PR open</b>, not only on mention
+              </li>
+              <li>
+                PR-only; never push <code class="inline">main</code>/<code
+                  class="inline"
+                  >staging</code
+                >
+                (pre-push already confirms)
+              </li>
+              <li>
+                Atomic, single-app commits → monorepo
+                <b>clean-revert path</b> can undo one AI change safely
+              </li>
+            </ul>
+            <p class="ref">
+              Flags / canary / kill-switch owned by the separate revert-path
+              work — not this harness.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 10: sequencing / close -->
+      <section class="slide center">
+        <div class="kicker">Sequencing</div>
+        <h1 style="font-size: 40px">Ship the safety floor first</h1>
+        <p class="sub">
+          <b>P1–P3</b> (deny-gate, cross-app guard, verify-before-done) are
+          deterministic, high-value, low-risk — land them first and they pay off
+          day one. <b>P4–P6</b> add reuse + self-improvement. <b>P7–P8</b> make
+          not-reading-every-line defensible for real customers.
+        </p>
+        <div class="pills">
+          <span class="pill">P1–P3 = safety floor</span>
+          <span class="pill">P4–P6 = efficiency + self-improvement</span>
+          <span class="pill">P7–P8 = ship-to-customer</span>
+        </div>
+        <p class="ref" style="text-align: center; margin-top: 24px">
+          Research + cited sources:
+          <code class="inline">llm/ai-harness-research-handoff.md</code> · Spec:
+          <code class="inline"
+            >.omc/specs/deep-interview-monorepo-ai-harness.md</code
+          >
+        </p>
+      </section>
+
+      <div class="nav">
+        <button onclick="go(-1)">‹</button><button onclick="go(1)">›</button>
+      </div>
+      <div class="footer">
+        <div>AI Harness — Applied to Lalilo</div>
+        <div class="dots" id="dots"></div>
+        <div><span id="counter">1 / 10</span></div>
+      </div>
+    </div>
+    <script>
+      const slides = [...document.querySelectorAll('.slide')]
+      const dots = document.getElementById('dots')
+      const counter = document.getElementById('counter')
+      let i = 0
+      slides.forEach((_, k) => {
+        const d = document.createElement('span')
+        d.className = 'dot' + (k === 0 ? ' on' : '')
+        d.onclick = () => set(k)
+        dots.appendChild(d)
+      })
+      function set(n) {
+        i = (n + slides.length) % slides.length
+        slides.forEach((s, k) => s.classList.toggle('active', k === i))
+        ;[...dots.children].forEach((d, k) => d.classList.toggle('on', k === i))
+        counter.textContent = i + 1 + ' / ' + slides.length
+      }
+      function go(d) {
+        set(i + d)
+      }
+      document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight' || e.key === ' ') go(1)
+        if (e.key === 'ArrowLeft') go(-1)
+        if (e.key === 'Home') set(0)
+        if (e.key === 'End') set(slides.length - 1)
+      })
+    </script>
+  </body>
+</html>
