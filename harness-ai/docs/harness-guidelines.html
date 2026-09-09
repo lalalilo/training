@@ -1,0 +1,1267 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>What Makes a Good & Efficient AI Harness</title>
+    <style>
+      :root {
+        --bg: #0d1117;
+        --panel: #161b22;
+        --panel2: #1c2330;
+        --ink: #e6edf3;
+        --muted: #8b949e;
+        --accent: #58a6ff;
+        --green: #3fb950;
+        --amber: #d29922;
+        --red: #f85149;
+        --purple: #bc8cff;
+        --line: #30363d;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+          Arial, sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+        overflow: hidden;
+      }
+      .deck {
+        height: 100vh;
+        width: 100vw;
+        position: relative;
+      }
+      .slide {
+        position: absolute;
+        inset: 0;
+        display: none;
+        flex-direction: column;
+        padding: 46px 64px 78px;
+        animation: fade 0.35s ease;
+      }
+      .slide.active {
+        display: flex;
+      }
+      @keyframes fade {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      h1 {
+        font-size: 44px;
+        line-height: 1.1;
+        margin-bottom: 10px;
+        letter-spacing: -0.5px;
+      }
+      h2 {
+        font-size: 32px;
+        margin-bottom: 20px;
+        letter-spacing: -0.3px;
+      }
+      h2 .pin {
+        color: var(--accent);
+      }
+      .sub {
+        color: var(--muted);
+        font-size: 18px;
+        margin-bottom: 26px;
+        max-width: 900px;
+      }
+      .kicker {
+        color: var(--accent);
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 13px;
+        margin-bottom: 14px;
+      }
+      ul {
+        list-style: none;
+      }
+      li {
+        padding: 9px 0 9px 28px;
+        position: relative;
+        font-size: 18px;
+        line-height: 1.4;
+        border-bottom: 1px solid var(--line);
+      }
+      li:before {
+        content: '•';
+        position: absolute;
+        left: 0;
+        color: var(--accent);
+      }
+      li b {
+        color: #fff;
+      }
+      .cols {
+        display: flex;
+        gap: 26px;
+        flex: 1;
+        min-height: 0;
+      }
+      .col {
+        flex: 1;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 24px;
+        overflow: auto;
+      }
+      .col h3 {
+        font-size: 20px;
+        margin-bottom: 14px;
+      }
+      .center {
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+      .center h1 {
+        font-size: 56px;
+        background: linear-gradient(90deg, #58a6ff, #bc8cff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .center .sub {
+        font-size: 22px;
+        max-width: 760px;
+      }
+      .pills {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 26px;
+      }
+      .pill {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 30px;
+        padding: 8px 18px;
+        font-size: 15px;
+      }
+      .layers {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        flex: 1;
+        justify-content: center;
+      }
+      .layer {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-left: 4px solid var(--accent);
+        border-radius: 10px;
+        padding: 12px 20px;
+      }
+      .layer.det {
+        border-left-color: var(--green);
+      }
+      .layer .n {
+        font-weight: 800;
+        color: var(--accent);
+        font-size: 15px;
+        min-width: 26px;
+      }
+      .layer.det .n {
+        color: var(--green);
+      }
+      .layer .nm {
+        font-weight: 700;
+        font-size: 17px;
+        min-width: 240px;
+      }
+      .layer .ds {
+        color: var(--muted);
+        font-size: 15px;
+      }
+      .legend {
+        display: flex;
+        gap: 18px;
+        margin-top: 14px;
+        flex-wrap: wrap;
+      }
+      .legend span {
+        font-size: 14px;
+        color: var(--muted);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .swatch {
+        width: 12px;
+        height: 12px;
+        border-radius: 3px;
+        display: inline-block;
+      }
+      .quote {
+        background: var(--panel);
+        border-left: 4px solid var(--purple);
+        border-radius: 0 10px 10px 0;
+        padding: 14px 18px;
+        margin-bottom: 12px;
+      }
+      .quote .q {
+        font-size: 16px;
+        line-height: 1.4;
+      }
+      .quote .who {
+        color: var(--muted);
+        font-size: 13px;
+        margin-top: 6px;
+      }
+      .quote .who b {
+        color: var(--accent);
+      }
+      .flow {
+        display: flex;
+        align-items: stretch;
+        flex: 1;
+        margin-top: 8px;
+      }
+      .flowcol {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      .flowhead {
+        font-weight: 800;
+        font-size: 16px;
+        text-align: center;
+        padding: 10px;
+        border-radius: 10px 10px 0 0;
+      }
+      .fh-have {
+        background: rgba(63, 185, 80, 0.15);
+        color: var(--green);
+        border: 1px solid var(--green);
+      }
+      .fh-weak {
+        background: rgba(210, 153, 34, 0.15);
+        color: var(--amber);
+        border: 1px solid var(--amber);
+      }
+      .fh-miss {
+        background: rgba(248, 81, 73, 0.15);
+        color: var(--red);
+        border: 1px solid var(--red);
+      }
+      .flowbody {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-top: none;
+        border-radius: 0 0 10px 10px;
+        padding: 14px;
+        flex: 1;
+      }
+      .flowbody div {
+        font-size: 14px;
+        line-height: 1.4;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+      }
+      .flowbody div:last-child {
+        border-bottom: none;
+      }
+      .flowbody .lead {
+        color: var(--ink);
+        font-weight: 700;
+        font-size: 15px;
+      }
+      .arrow {
+        display: flex;
+        align-items: center;
+        color: var(--muted);
+        font-size: 24px;
+        padding: 0 8px;
+      }
+      .grid2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+        flex: 1;
+      }
+      .card {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+      }
+      .card h3 {
+        font-size: 18px;
+        margin-bottom: 8px;
+      }
+      .card p {
+        color: var(--muted);
+        font-size: 14.5px;
+        line-height: 1.45;
+      }
+      .card .eg {
+        background: rgba(248, 81, 73, 0.08);
+        border-left: 3px solid var(--red);
+        border-radius: 0 6px 6px 0;
+        padding: 9px 12px;
+        font-size: 13.5px;
+        line-height: 1.45;
+        color: var(--ink);
+        margin: 10px 0;
+      }
+      .card .eg b {
+        color: var(--red);
+      }
+      .card .fix {
+        background: rgba(63, 185, 80, 0.1);
+        border-left: 3px solid var(--green);
+        border-radius: 0 6px 6px 0;
+        padding: 9px 12px;
+        font-size: 13.5px;
+        line-height: 1.45;
+        color: var(--ink);
+        margin-bottom: 10px;
+      }
+      .card .fix b {
+        color: var(--green);
+      }
+      .badge {
+        display: inline-block;
+        font-weight: 800;
+        font-size: 12px;
+        letter-spacing: 0.5px;
+        padding: 2px 9px;
+        border-radius: 6px;
+        background: var(--red);
+        color: #fff;
+        vertical-align: middle;
+      }
+      .flowbody .badge {
+        font-size: 11px;
+        padding: 1px 7px;
+      }
+      .card .src-link {
+        margin-top: auto;
+        font-size: 12.5px;
+      }
+      .card .src-link a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      .card .src-link a:hover {
+        text-decoration: underline;
+      }
+      .ref {
+        color: var(--muted);
+        font-size: 13px;
+        font-style: italic;
+        margin-top: auto;
+        padding-top: 14px;
+      }
+      code.inline {
+        background: var(--panel2);
+        padding: 2px 7px;
+        border-radius: 5px;
+        font-size: 0.9em;
+        color: var(--purple);
+      }
+      .note {
+        background: rgba(88, 166, 255, 0.08);
+        border-left: 3px solid var(--accent);
+        border-radius: 0 8px 8px 0;
+        padding: 12px 16px;
+        font-size: 15px;
+        line-height: 1.5;
+        color: var(--ink);
+        margin-bottom: 18px;
+        max-width: 940px;
+      }
+      .note b {
+        color: var(--accent);
+      }
+      .glossary {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px 26px;
+        flex: 1;
+        align-content: center;
+      }
+      .term {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 16px 18px;
+      }
+      .term h4 {
+        font-size: 17px;
+        margin-bottom: 5px;
+        color: var(--accent);
+      }
+      .term p {
+        font-size: 15px;
+        line-height: 1.45;
+        color: var(--muted);
+      }
+      .term p b {
+        color: var(--ink);
+      }
+      .links {
+        display: flex;
+        flex-direction: column;
+        gap: 11px;
+        flex: 1;
+        justify-content: center;
+      }
+      .links a {
+        display: flex;
+        align-items: baseline;
+        gap: 14px;
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 14px 18px;
+        text-decoration: none;
+        color: var(--ink);
+        transition: 0.15s;
+      }
+      .links a:hover {
+        border-color: var(--accent);
+        background: var(--panel2);
+      }
+      .links .src {
+        font-weight: 700;
+        min-width: 220px;
+        font-size: 16px;
+      }
+      .links .dsc {
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .links .url {
+        color: var(--accent);
+        font-size: 12.5px;
+        margin-left: auto;
+        white-space: nowrap;
+      }
+      .footer {
+        position: absolute;
+        bottom: 24px;
+        left: 64px;
+        right: 64px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--muted);
+        font-size: 13px;
+        border-top: 1px solid var(--line);
+        padding-top: 14px;
+      }
+      .dots {
+        display: flex;
+        gap: 7px;
+      }
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--line);
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .dot.on {
+        background: var(--accent);
+        width: 22px;
+        border-radius: 5px;
+      }
+      .nav {
+        position: absolute;
+        bottom: 18px;
+        right: 64px;
+        display: flex;
+        gap: 8px;
+        z-index: 10;
+      }
+      .nav button {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        color: var(--ink);
+        width: 40px;
+        height: 40px;
+        border-radius: 9px;
+        cursor: pointer;
+        font-size: 18px;
+        transition: 0.15s;
+      }
+      .nav button:hover {
+        background: var(--accent);
+        color: #000;
+        border-color: var(--accent);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="deck" id="deck">
+      <!-- 1 -->
+      <section class="slide active center">
+        <div class="kicker">Part I · General Guidelines</div>
+        <h1>What Makes an AI Harness<br />Good &amp; Efficient</h1>
+        <p class="sub">
+          The environment around the model — not the model — is what makes
+          AI-assisted development safe and fast. Principles, with the industry
+          evidence behind them.
+        </p>
+        <div class="pills">
+          <span class="pill">plain-language</span
+          ><span class="pill">repo-agnostic</span
+          ><span class="pill">cited + links</span>
+        </div>
+      </section>
+
+      <!-- 1b: plain-language intro -->
+      <section class="slide">
+        <div class="kicker">Start Here — what is a "harness"?</div>
+        <h2>
+          A harness is the <span class="pin">safety setup around the AI</span>
+        </h2>
+        <div class="note">
+          Think of an AI coding assistant like a very fast new hire who has
+          never seen your codebase. A <b>harness</b> is everything you put
+          around that assistant so it does good work without breaking things:
+          the written rules it reads, the automatic checks that stop it from
+          doing something dangerous, and the tests that prove its work is
+          correct. The AI model is the engine; the harness is the seatbelts,
+          guardrails, and dashboard.
+        </div>
+        <div class="cols">
+          <div class="col">
+            <h3>Why it matters</h3>
+            <ul>
+              <li>
+                <b>AI is confident even when wrong</b> — it needs checking, not
+                trust
+              </li>
+              <li>
+                <b>A monorepo has many apps</b> — one careless change can hit
+                code you didn't mean to touch
+              </li>
+              <li>
+                <b>Real customers use this code</b> — "looks done" is not the
+                same as "is correct"
+              </li>
+            </ul>
+          </div>
+          <div class="col">
+            <h3>Two words you'll see a lot</h3>
+            <div class="term" style="margin-bottom: 12px">
+              <h4>Deterministic</h4>
+              <p>
+                A check that <b>always runs the same way</b>, like a script — it
+                can't be talked out of it. Reliable.
+              </p>
+            </div>
+            <div class="term">
+              <h4>Advisory</h4>
+              <p>
+                A written instruction the AI <b>may or may not follow</b>, like
+                a note in a doc. Helpful, but not a guarantee.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2: thesis -->
+      <section class="slide center">
+        <div class="kicker">The Core Idea</div>
+        <h1 style="font-size: 46px">The harness <em>is</em> the product</h1>
+        <p class="sub">
+          An AI model guesses the next best answer — it's often right, but never
+          guaranteed. You don't make it safe by trusting it; you make it safe
+          with automatic layers around it that constrain, check, and stack up.
+          Each layer is cheap; together they're a guardrail system.
+        </p>
+        <p class="ref" style="text-align: center">
+          "AI tools amplify existing expertise." — Simon Willison,
+          <em>vibe engineering</em>, Oct 2025
+        </p>
+      </section>
+
+      <!-- 3: layer model -->
+      <section class="slide">
+        <div class="kicker">Principle 1 — Layered defense</div>
+        <h2>Eight layers, lowest friction first</h2>
+        <div class="note">
+          No single check catches everything, so you stack cheap layers — like
+          slices of swiss cheese, where one slice's holes are covered by the
+          next. <b>Green layers are automatic</b> (they always fire); blue
+          layers are <b>notes the AI reads</b> (it might skip them). Put your
+          scariest risks in the green layers.
+        </div>
+        <div class="layers">
+          <div class="layer">
+            <span class="n">1</span
+            ><span class="nm">Instructions — CLAUDE.md</span
+            ><span class="ds"
+              >The main rulebook the AI reads at the start of every
+              session</span
+            >
+          </div>
+          <div class="layer">
+            <span class="n">2</span
+            ><span class="nm">Rules — .claude/rules/</span
+            ><span class="ds"
+              >Extra context loaded automatically for a given area of code</span
+            >
+          </div>
+          <div class="layer">
+            <span class="n">3</span><span class="nm">Skills</span
+            ><span class="ds"
+              >Saved step-by-step recipes for tasks the AI does often</span
+            >
+          </div>
+          <div class="layer">
+            <span class="n">4</span><span class="nm">Sub-agents</span
+            ><span class="ds"
+              >Helper AIs with a narrow job and limited tools</span
+            >
+          </div>
+          <div class="layer det">
+            <span class="n">5</span><span class="nm">Hooks</span
+            ><span class="ds"
+              >Scripts that auto-run and can block a dangerous action</span
+            >
+          </div>
+          <div class="layer det">
+            <span class="n">6</span><span class="nm">CI automation</span
+            ><span class="ds"
+              >Checks on the server that must pass before code merges</span
+            >
+          </div>
+          <div class="layer">
+            <span class="n">7</span><span class="nm">State &amp; memory</span
+            ><span class="ds"
+              >Notes the AI keeps so it remembers across a long task</span
+            >
+          </div>
+          <div class="layer det">
+            <span class="n">8</span
+            ><span class="nm">Isolation — worktrees / sandbox</span
+            ><span class="ds"
+              >A separate workspace so a mistake can't spread</span
+            >
+          </div>
+        </div>
+        <div class="legend">
+          <span
+            ><i class="swatch" style="background: var(--green)"></i>
+            deterministic — always fires (carry the top risks here)</span
+          >
+          <span
+            ><i class="swatch" style="background: var(--accent)"></i> contextual
+            — model reads it (can be ignored)</span
+          >
+        </div>
+      </section>
+
+      <!-- 4: deterministic > advisory -->
+      <section class="slide">
+        <div class="kicker">Principle 2 — Deterministic beats advisory</div>
+        <h2>
+          Put the top risks where the model
+          <span class="pin">can't forget</span>
+        </h2>
+        <div class="note">
+          Two ways to make the AI do something. A <b>deterministic</b> check is
+          a script that runs automatically and always behaves the same — the AI
+          can't skip it. An <b>advisory</b> instruction is just written guidance
+          (e.g. a line in a docs file) the AI <em>might</em> follow — but in a
+          long session it loses track of earlier instructions (called "context
+          rot"), so guidance gets forgotten.
+          <b
+            >Lesson: don't put critical safety in writing the AI can ignore —
+            put it in a script it can't.</b
+          >
+        </div>
+        <div class="cols">
+          <div class="col">
+            <h3>✅ Deterministic — automatic, reliable</h3>
+            <ul>
+              <li>
+                <b>Hooks</b> — a script that blocks the action; runs no matter
+                what<br /><code class="inline">.claude/hooks/*.sh</code> +
+                <code class="inline">.claude/settings.json</code>
+              </li>
+              <li>
+                <b>Required CI checks</b> — build/test/lint must pass before
+                merge<br /><code class="inline">.github/workflows/</code> ·
+                <code class="inline">.circleci/config.yml</code>
+              </li>
+              <li>
+                <b>Permission deny-list</b> — forbidden commands, can't be
+                overridden<br /><code class="inline"
+                  >.claude/settings.json → permissions.deny</code
+                >
+              </li>
+              <li>
+                <b>Git pre-commit hook</b> — rejects bad commits before they
+                exist<br /><code class="inline">.husky/pre-commit</code>
+              </li>
+            </ul>
+          </div>
+          <div class="col">
+            <h3>⚠️ Advisory — guidance, may be ignored</h3>
+            <ul>
+              <li>
+                <b>Instructions / rules the AI reads</b> — influence what it
+                <em>tries</em>, don't stop it<br /><code class="inline"
+                  >CLAUDE.md</code
+                >
+                · <code class="inline">.claude/rules/*.md</code>
+              </li>
+              <li>
+                <b>"Remember to run the tests"</b> — works early, forgotten once
+                the session gets long<br /><code class="inline"
+                  >a line inside CLAUDE.md</code
+                >
+              </li>
+              <li>
+                <b>Coding-style notes in prose</b> — followed at first, then
+                slowly drift<br /><code class="inline"
+                  >CLAUDE.md / README prose</code
+                >
+              </li>
+            </ul>
+            <p class="ref">
+              Adaptive attacks beat 12 published prompt-injection defenses
+              &gt;90% despite ~0% in their papers. Don't rely on the model
+              behaving. — Willison, Nov 2025
+            </p>
+          </div>
+        </div>
+        <div class="note" style="margin-top: 18px; margin-bottom: 0">
+          <b>What makes a CI check "required"?</b> The workflow file (<code
+            class="inline"
+            >.github/workflows/</code
+          >) only defines <em>what</em> runs — by itself an agent could still
+          merge a failing PR. The check becomes <b>mandatory</b> via
+          <b>branch protection</b>, a setting on the GitHub/GitLab server (not
+          in the repo) that disables the merge button until the check passes and
+          forbids direct pushes to <code class="inline">main</code>. The agent
+          can't edit that server setting and has no merge-bypass — so its only
+          path to <code class="inline">main</code> is through the gate.
+        </div>
+      </section>
+
+      <!-- 5: verification substitutes for reading -->
+      <section class="slide">
+        <div class="kicker">
+          Principle 3 — Verification substitutes for reading
+        </div>
+        <h2>
+          "Don't read the code" is <span class="pin">earned</span>, never free
+        </h2>
+        <div class="note">
+          A growing trend: some well-known engineers let the AI write code they
+          barely read. That only works because they have
+          <b>strong automatic tests and checks</b> proving the code behaves
+          correctly — they trust the <b>results</b>, not the AI. Without those
+          checks it's just gambling. The quotes below are practitioners
+          describing the trade-off honestly.
+        </div>
+        <div class="cols">
+          <div class="col">
+            <div class="quote">
+              <div class="q">
+                "Test at the right boundaries and you can ignore what's inside…
+                every change should trigger your pre-commit hooks, CI, and type
+                checking."
+              </div>
+              <div class="who">
+                <b>Matt Pocock</b> — grey-box modules · Mar 2026
+              </div>
+            </div>
+            <div class="quote">
+              <div class="q">
+                "I'm not reviewing every line… even for my production stuff." —
+                then names it <b>normalization of deviance</b>.
+              </div>
+              <div class="who"><b>Simon Willison</b> · May 2026</div>
+            </div>
+            <div class="quote">
+              <div class="q">
+                "I certainly haven't. No time for field trips." — but
+                <b>The Mayor agent reviews every PR</b>.
+              </div>
+              <div class="who"><b>Steve Yegge</b> · Mar 2026</div>
+            </div>
+          </div>
+          <div class="col">
+            <h3>The deal you're making</h3>
+            <p
+              style="
+                color: var(--muted);
+                font-size: 16px;
+                line-height: 1.5;
+                margin-bottom: 16px;
+              "
+            >
+              You stop reading <em>every line</em> and instead trust that
+              <b style="color: var(--ink)">automated checks</b> prove the code
+              behaves correctly. That trade is only safe when those checks are
+              real and strong.
+            </p>
+            <div class="fix" style="margin-bottom: 14px">
+              <b>The test:</b> could you confidently let the AI's change ship
+              <em>without</em> reading it? Only if a failing check would have
+              caught it. If not — you're gambling, so read it.
+            </div>
+            <p style="color: var(--muted); font-size: 15px; line-height: 1.5">
+              The exact checks that earn this trust — tests written first, type
+              checking, a second AI reviewing the diff, running it for real —
+              are
+              <b style="color: var(--ink)"
+                >Principle 5, stage 2 (“prove it works”)</b
+              >. This slide is the <em>why</em>; that one is the <em>how</em>.
+            </p>
+            <p class="ref">
+              Trust the checks, not the AI. Nobody safe stopped reading code and
+              replaced it with nothing.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6: the problems — real attacks -->
+      <section class="slide">
+        <div class="kicker">Principle 4 — Know the real risks first</div>
+        <h2>
+          What actually goes wrong —
+          <span class="pin">four documented cases</span> (among many)
+        </h2>
+        <div class="note">
+          The danger isn't only buggy code — it's an agent with too much access
+          getting tricked. These are <b>documented, real exploits</b>, not
+          hypotheticals. Read them first; the very next slide (Principle 5)
+          shows the workflow that prevents each one.
+        </div>
+        <div class="grid2">
+          <div class="card">
+            <h3>
+              <span class="badge">CASE A</span> ☠️ Data leak via the "lethal
+              trifecta"
+            </h3>
+            <p>
+              The dangerous combo is one agent that has all three: (1) access to
+              <b>private data</b>, (2) exposure to <b>content from outside</b>,
+              (3) a way to <b>send data out</b>.
+            </p>
+            <div class="eg">
+              <b>GitHub MCP, May 2025:</b> a user asked their Claude agent to
+              "look at the open issues" in a public repo. One issue was a trap:
+              it told the agent to read the user's <em>private</em> repos and
+              paste their contents into a public pull request. The agent obeyed
+              — private code leaked, no human action needed.
+            </div>
+            <p class="src-link">
+              Source:
+              <a
+                href="https://invariantlabs.ai/blog/mcp-github-vulnerability"
+                target="_blank"
+                >invariantlabs.ai/blog/mcp-github-vulnerability</a
+              >
+              · term:
+              <a href="https://simonwillison.net/2025/Jun/16/" target="_blank"
+                >simonwillison.net (Jun 2025)</a
+              >
+            </p>
+          </div>
+          <div class="card">
+            <h3><span class="badge">CASE B</span> 🔑 Stolen credentials</h3>
+            <p>
+              If the agent can be tricked <em>and</em> it holds real keys, the
+              attacker gets your keys' powers too — reading or exfiltrating
+              whatever those credentials unlock.
+            </p>
+            <div class="eg">
+              <b>GitLab Duo, May 2025:</b> a hidden instruction in a public
+              merge request made the AI use its access to grab a private
+              project's source, base64-encode it, and smuggle it out inside an
+              image URL in its own reply.
+            </div>
+            <p class="src-link">
+              Source:
+              <a
+                href="https://www.legitsecurity.com/blog/remote-prompt-injection-in-gitlab-duo"
+                target="_blank"
+                >legitsecurity.com — GitLab Duo prompt injection</a
+              >
+            </p>
+          </div>
+          <div class="card">
+            <h3>
+              <span class="badge">CASE C</span> 📦 Poisoned dependencies
+              ("slopsquatting")
+            </h3>
+            <p>
+              AI sometimes invents a package name that doesn't exist; an
+              attacker registers that exact name with malware. The agent then
+              installs the attacker's code.
+            </p>
+            <div class="eg">
+              <b>Lasso Security, 2024:</b> researchers registered
+              <code class="inline">huggingface-cli</code>, a package name GPT
+              models kept hallucinating. It got 30,000+ real downloads in 3
+              months — even Alibaba's docs told people to install it.
+            </div>
+            <p class="src-link">
+              Source:
+              <a
+                href="https://www.lasso.security/blog/ai-package-hallucinations"
+                target="_blank"
+                >lasso.security/blog/ai-package-hallucinations</a
+              >
+              ·
+              <a
+                href="https://genai.owasp.org/llmrisk/llm032025-supply-chain/"
+                target="_blank"
+                >OWASP LLM03:2025</a
+              >
+            </p>
+          </div>
+          <div class="card">
+            <h3>
+              <span class="badge">CASE D</span> 🐛 Plausible-but-broken code
+            </h3>
+            <p>
+              The quiet one: the AI writes code that looks right, reads well,
+              and even runs — but is subtly wrong, mishandles an edge case, or
+              breaks something elsewhere. No attacker needed.
+            </p>
+            <div class="eg">
+              <b>Everyday reality:</b> "looks done" is not "is correct". Without
+              checks that actually exercise the behaviour, these slip through
+              review and surface in production in front of customers.
+            </div>
+            <p class="src-link">
+              Source:
+              <a
+                href="https://simonwillison.net/2025/Mar/19/vibe-coding/"
+                target="_blank"
+                >simonwillison.net — vibe coding</a
+              >
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7: the solutions — write / prove / ship -->
+      <section class="slide">
+        <div class="kicker">
+          Principle 5 — A workflow that prevents all four
+        </div>
+        <h2>
+          Three stages, in order:
+          <span class="pin">write → prove → ship</span>
+        </h2>
+        <div class="note">
+          Each <span class="badge">CASE</span> badge below matches the same
+          badge on the previous slide — that's the stage that stops it. Getting
+          AI to <b>write</b> code is the easy part; <b>proving</b> it's correct
+          and <b>shipping</b> it safely are what make it OK for real customers.
+          Skip a stage and the matching risk comes back.
+        </div>
+        <div class="flow">
+          <div class="flowcol">
+            <div class="flowhead fh-have">1 · WRITE IT</div>
+            <div class="flowbody">
+              <div class="lead">The AI writes code, guided and fenced in.</div>
+              <div>
+                It reads your <code class="inline">CLAUDE.md</code> and
+                <code class="inline">.claude/rules/</code> for how this repo
+                works.
+              </div>
+              <div>
+                A <code class="inline">PreToolUse</code> hook blocks dangerous
+                commands (<code class="inline">migrate down</code>,
+                <code class="inline">kubectl delete</code>).
+              </div>
+              <div>
+                <span class="badge">CASE A</span> Scope its access: never give
+                one agent private data + outside input + a way out at once.
+              </div>
+              <div>
+                <span class="badge">CASE B</span> It holds
+                <b>no real secrets</b>; CI uses short-lived OIDC tokens.
+              </div>
+              <div>
+                Works in a <code class="inline">git worktree</code> — an
+                experiment can't touch your main checkout.
+              </div>
+            </div>
+          </div>
+          <div class="arrow">→</div>
+          <div class="flowcol">
+            <div class="flowhead fh-weak">2 · PROVE IT WORKS</div>
+            <div class="flowbody">
+              <div class="lead">
+                Evidence the code is correct — not "looks fine".
+              </div>
+              <div>
+                <span class="badge">CASE D</span>
+                <code class="inline">yarn test</code> +
+                <code class="inline">check-types</code> on every change; broken
+                behaviour turns a test red.
+              </div>
+              <div>
+                Run the real feature end-to-end (e.g. a Playwright script
+                clicking through it).
+              </div>
+              <div>
+                A second AI reviews the diff in a fresh chat (<code
+                  class="inline"
+                  >claude-pr-review</code
+                >) and tries to break it.
+              </div>
+              <div>
+                <span class="badge">CASE C</span>
+                <code class="inline">yarn audit</code> + lockfile review before
+                merge.
+              </div>
+              <div>
+                Track <b>rework rate</b> — how often merged AI code has to be
+                fixed afterwards.
+              </div>
+            </div>
+          </div>
+          <div class="arrow">→</div>
+          <div class="flowcol">
+            <div class="flowhead fh-miss">3 · SHIP IT SAFELY</div>
+            <div class="flowbody">
+              <div class="lead">
+                Roll out so a bad change is caught or undone fast.
+              </div>
+              <div>
+                Open a Pull Request; <b>branch protection</b> forbids pushing
+                straight to <code class="inline">main</code>.
+              </div>
+              <div>
+                Required CI checks (GitHub Actions / CircleCI) must be green
+                before the merge button unlocks.
+              </div>
+              <div>
+                Release behind a <b>feature flag</b> or to a small % of users
+                first (canary), not everyone at once.
+              </div>
+              <div>
+                If metrics spike, <b>roll back in one click</b> — revert the
+                merge / flip the flag off.
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="ref">
+          Green = "looks done". Amber = "proven done". Red = "safe in front of
+          customers". All three, in order.
+        </p>
+      </section>
+
+      <!-- 8: efficiency + measure -->
+      <section class="slide">
+        <div class="kicker">
+          Principle 6 — Make it efficient & self-improving
+        </div>
+        <h2>
+          Make it fast to use, and let it
+          <span class="pin">improve itself</span>
+        </h2>
+        <div class="note">
+          A safe harness that's painful to use gets bypassed. Two goals here:
+          remove friction so the AI runs smoothly, and measure the
+          <b>right</b> things so you can tell if AI work is actually helping —
+          not just producing more code.
+        </div>
+        <div class="cols">
+          <div class="col">
+            <h3>⚡ Make it efficient</h3>
+            <ul>
+              <li>
+                <b>Pre-approve safe commands</b> — agent runs without nagging
+                for permission; only stops at genuinely risky actions
+              </li>
+              <li>
+                <b>Write it once, reuse everywhere</b> — shared rules at the
+                root; a new app inherits the whole harness for free
+              </li>
+              <li>
+                <b>Let agents do the chores</b> — scheduled jobs that simplify
+                code / clear tech debt, and undo themselves if they break a
+                build
+              </li>
+              <li>
+                <b>Self-improving loop</b> — a weekly "gardener" agent audits
+                the code &amp; the harness itself and files a few fix tickets
+              </li>
+            </ul>
+          </div>
+          <div class="col">
+            <h3>📊 Measure the right thing</h3>
+            <ul>
+              <li>
+                <b>Rework rate</b> — how often AI code passes review but has to
+                be fixed later. Rising = trouble. The best early warning.
+              </li>
+              <li>
+                <b>First-pass acceptance</b> — % of AI changes merged with no
+                edits. A real quality signal — unlike "lines of code", which
+                rewards volume.
+              </li>
+              <li>
+                <b>Failure rate &amp; time-to-recover</b> — how often a change
+                breaks production and how fast you fix it, tracked separately
+                for AI vs human work
+              </li>
+            </ul>
+            <p class="ref">
+              Watch out: measuring volume (lines, PR count) hides the real cost
+              — more code = more to maintain. — ThoughtWorks Radar 34
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9: further reading -->
+      <section class="slide">
+        <div class="kicker">Go Deeper — further reading</div>
+        <h2>Trusted sources, in plain order of approachability</h2>
+        <div class="note">
+          New to this? Start at the top — those are the gentlest. The lower ones
+          are more technical. All are free to read online.
+        </div>
+        <div class="links">
+          <a
+            href="https://simonwillison.net/2025/Mar/19/vibe-coding/"
+            target="_blank"
+          >
+            <span class="src">Simon Willison</span>
+            <span class="dsc"
+              >"Vibe coding" explained — when it's safe to let AI write code,
+              and when it isn't. The friendliest starting point.</span
+            >
+            <span class="url">simonwillison.net</span>
+          </a>
+          <a
+            href="https://www.aihero.dev/ways-ai-coding-has-rewired-my-brain"
+            target="_blank"
+          >
+            <span class="src">Matt Pocock</span>
+            <span class="dsc"
+              >How a working engineer changed his habits for AI — tests, types,
+              and trusting boundaries. Practical, concrete.</span
+            >
+            <span class="url">aihero.dev</span>
+          </a>
+          <a
+            href="https://www.anthropic.com/research/building-effective-agents"
+            target="_blank"
+          >
+            <span class="src">Anthropic</span>
+            <span class="dsc"
+              >"Building effective agents" — the makers of Claude on how to
+              design AI agents that stay safe and predictable.</span
+            >
+            <span class="url">anthropic.com</span>
+          </a>
+          <a
+            href="https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/"
+            target="_blank"
+          >
+            <span class="src">The "lethal trifecta"</span>
+            <span class="dsc"
+              >The three capabilities that, combined, let an AI leak your data —
+              and how to break the combination.</span
+            >
+            <span class="url">simonwillison.net</span>
+          </a>
+          <a
+            href="https://code.claude.com/docs/en/best-practices"
+            target="_blank"
+          >
+            <span class="src">Claude Code docs</span>
+            <span class="dsc"
+              >Official best-practices: hooks, permissions, verification gates.
+              The reference once you're building.</span
+            >
+            <span class="url">code.claude.com</span>
+          </a>
+          <a href="https://www.thoughtworks.com/radar" target="_blank">
+            <span class="src">ThoughtWorks Radar</span>
+            <span class="dsc"
+              >Industry trends incl. measuring AI code quality (rework rate,
+              fitness functions). For the team-lead view.</span
+            >
+            <span class="url">thoughtworks.com/radar</span>
+          </a>
+        </div>
+        <p class="ref">
+          Full cited research with every source URL lives in
+          <code class="inline">llm/ai-harness-research-handoff.md</code>.
+        </p>
+      </section>
+
+      <div class="nav">
+        <button onclick="go(-1)">‹</button><button onclick="go(1)">›</button>
+      </div>
+      <div class="footer">
+        <div>AI Harness — General Guidelines</div>
+        <div class="dots" id="dots"></div>
+        <div><span id="counter">1 / 8</span></div>
+      </div>
+    </div>
+    <script>
+      const slides = [...document.querySelectorAll('.slide')]
+      const dots = document.getElementById('dots')
+      const counter = document.getElementById('counter')
+      let i = 0
+      slides.forEach((_, k) => {
+        const d = document.createElement('span')
+        d.className = 'dot' + (k === 0 ? ' on' : '')
+        d.onclick = () => set(k)
+        dots.appendChild(d)
+      })
+      function set(n) {
+        i = (n + slides.length) % slides.length
+        slides.forEach((s, k) => s.classList.toggle('active', k === i))
+        ;[...dots.children].forEach((d, k) => d.classList.toggle('on', k === i))
+        counter.textContent = i + 1 + ' / ' + slides.length
+      }
+      function go(d) {
+        set(i + d)
+      }
+      document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight' || e.key === ' ') go(1)
+        if (e.key === 'ArrowLeft') go(-1)
+        if (e.key === 'Home') set(0)
+        if (e.key === 'End') set(slides.length - 1)
+      })
+    </script>
+  </body>
+</html>

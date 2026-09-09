@@ -1,0 +1,132 @@
+/* Brick card — the left-accent-bar box used for every bullet/example across slides */
+.brick {
+  padding: 0.75rem 0.75rem 0.75rem 1rem;
+  border-left: 4px solid var(--brick-color, #60a5fa);
+  background: var(--brick-bg, rgba(96, 165, 250, 0.05));
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+/* Color variants — set once here, reused by every slide */
+.brick-blue   { --brick-color: #60a5fa; --brick-bg: rgba(96, 165, 250, 0.05); }
+.brick-amber  { --brick-color: #fbbf24; --brick-bg: rgba(251, 191, 36, 0.05); }
+.brick-green  { --brick-color: #4ade80; --brick-bg: rgba(74, 222, 128, 0.05); }
+.brick-purple { --brick-color: #c084fc; --brick-bg: rgba(192, 132, 252, 0.05); }
+
+/* Compact variant — for slides with more bricks than fit at normal spacing */
+.brick-compact { padding: 0.125rem 0.5rem 0.125rem 0.75rem; }
+
+/* Text inside a brick */
+.brick-title { color: var(--brick-color, #60a5fa); font-weight: bold; }
+.brick-desc  { opacity: 0.9; margin-top: 0.125rem; }
+.brick b     { color: var(--brick-color, #60a5fa); font-weight: 700; }
+.brick ul {
+  margin: 0.25rem 0 0 0;
+  padding: 0;
+  opacity: 0.75;
+  list-style: disc;
+  list-style-position: inside;
+}
+.brick li { margin: 0; }
+.brick-compact ul { margin-top: 0.1rem; }
+.brick-compact .brick-desc { margin-top: 0; }
+
+/* Container holding a stack of bricks */
+.bricks {
+  font-size: 0.875rem;
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.bricks-compact { margin-top: 0.5rem; gap: 0.25rem; }
+
+/* Vertical roadmap — the 3-step preview (Write it right / Verify & ship / Improve it) */
+.roadmap {
+  position: relative;
+  width: 32rem;
+  margin: 2rem auto 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.roadmap-loop {
+  position: absolute;
+  left: -2rem;
+  top: 2.25rem;
+  bottom: 2.25rem;
+  width: 1rem;
+  border: 2px solid #9ca3af;
+  border-right: none;
+  border-radius: 8px 0 0 8px;
+  opacity: 0.6;
+}
+
+.roadmap-step {
+  width: 100%;
+  max-width: 32rem;
+  padding: 1.25rem;
+  text-align: center;
+  font-size: 0.875rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--brick-color, #60a5fa);
+}
+.roadmap-step-desc { opacity: 0.7; font-size: 0.75rem; margin-top: 0.25rem; }
+.roadmap-arrow { opacity: 0.6; font-size: 1.5rem; text-align: center; }
+
+/* Closing / punchline statement below a bricks block */
+.closing {
+  margin-top: 2rem;
+  padding-left: 1rem;
+  font-size: 0.875rem;
+}
+
+/* Inline emphasis — key words, no background, just bold + color */
+.highlight-yellow { font-weight: bold; color: #ffb86c; }
+
+/* Large personal pull-quote — for a single reflective closing statement */
+.pull-quote {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  max-width: 46rem;
+  margin: 4rem auto 0 auto;
+  padding-left: 1.5rem;
+  border-left: 4px solid var(--brick-color, #60a5fa);
+}
+.pull-quote p { margin: 0 0 1.25rem 0; }
+.pull-quote p:last-child { margin-bottom: 0; }
+
+/* Monospace inline code-like terms (file/dir names, hook names) */
+.mono { font-family: monospace; }
+
+/* "What's an AI harness?" concentric-circle diagram */
+.harness-diagram { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center; margin-top: 1.5rem; }
+.harness-circles { position: relative; width: 300px; height: 300px; }
+.harness-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 9999px;
+  border: 2px solid var(--circle-color, #60a5fa);
+  background: var(--circle-bg, rgba(96, 165, 250, 0.05));
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 0.75rem;
+  text-align: center;
+}
+.harness-circle-outer  { width: 300px; height: 300px; --circle-color: #60a5fa; --circle-bg: rgba(96, 165, 250, 0.05); }
+.harness-circle-middle { width: 200px; height: 200px; --circle-color: #c084fc; --circle-bg: rgba(192, 132, 252, 0.1); }
+.harness-circle-inner  { width: 90px;  height: 90px;  --circle-color: #f472b6; --circle-bg: rgba(244, 114, 182, 0.2); align-items: center; }
+.harness-circle-label { font-size: 0.75rem; font-weight: bold; color: var(--circle-color, #60a5fa); letter-spacing: 0.05em; }
+
+.harness-legend { display: flex; flex-direction: column; gap: 1.25rem; font-size: 0.875rem; }
+.harness-legend-label { font-weight: bold; }
+.harness-legend-pink   { color: #f472b6; }
+.harness-legend-purple { color: #c084fc; }
+.harness-legend-blue   { color: #60a5fa; }
+
+.harness-tagline { font-size: 0.875rem; opacity: 0.8; }
+.harness-tagline .highlight-plain { color: #60a5fa; }
+
+.harness-link { position: absolute; bottom: 30px; right: 30px; font-size: 0.75rem; opacity: 0.7; }
